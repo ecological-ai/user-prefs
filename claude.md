@@ -10,7 +10,7 @@
 | Field        | Value |
 |--------------|-------|
 | `file_id`    | `claude.md` |
-| `version`    | `1.3.4` |
+| `version`    | `1.3.5` |
 | `scope`      | System-wide — applies to all sessions where this file is loaded |
 | `applies_to` | Claude (self-instruction) |
 | `parent`     | `prompteng.md` — Section 2.4 (Resilience & Session Continuity) |
@@ -284,7 +284,11 @@ Credential injected via uploaded file, read with `cat | tr -d` into shell enviro
 
 **[ACTION — AGENT]** If agent observes credential pasted inline at any point, warn immediately. Recommend rotation regardless of PAT-encoded expiration — transcript exposure is cumulative and irreversible via credential settings.
 
-**[ACTION — AGENT]** At session start, if uploaded credential file detected in `/mnt/user-data/uploads/`, verify via MD5 + scope check (GitHub API `/user` or equivalent) that credential meets the four eligibility conditions above before delegating rotation cadence.
+**[ACTION — AGENT]** At session start, if uploaded credential file detected in `/mnt/user-data/uploads/`, verify eligibility via two-channel protocol. Channel 1 (agent, in-session): compute and record MD5 of uploaded file; attempt scope check via provider REST API (e.g., `GET https://api.github.com/user`). Channel 2 (human, out-of-band): if Channel 1 REST call is blocked by the harness egress proxy (e.g., Anthropic `bash_tool` allowlist excludes `api.github.com` as of 2026-04-17), agent must (a) surface the block explicitly, (b) state the four eligibility conditions, and (c) request human confirmation of scope, expiration, and permission set before delegating rotation cadence. Proceed only after explicit human confirmation or successful Channel 1 check.
+
+**[RULE]** When Channel 1 is blocked and Channel 2 confirmation is unavailable, default to mandatory post-session rotation. Delegated rotation requires positive verification, not assumed compliance.
+
+**[ACTION — AGENT]** Log the verification channel used (`channel_1_rest`, `channel_2_human`, or `channel_2_unavailable_rotate_mandatory`) in the session checkpoint's credential handling record, for audit.
 
 **[ACTION — AGENT]** If the agent detects a credential or secret in a project knowledge file, project instruction, or any file injected into the system prompt, it must immediately warn the user and recommend removing the file and rotating the credential.
 
@@ -298,4 +302,4 @@ The rules in this section also interact with `prompteng.md` Section 2 (Session I
 
 ---
 
-*End of claude.md v1.3.4 — Human User Approved*
+*End of claude.md v1.3.5 — Human User Approved*
