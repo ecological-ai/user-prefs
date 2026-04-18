@@ -1,6 +1,6 @@
 # claude.md
 
-> **Note to Self: Context Window Efficiency & Memory Hygine**
+> **Note to Self: Context Window Efficiency & Memory Hygiene**
 > 
 > A system-wide self-instruction file. Add its contents to claude.ai web platform's `Settings > General > Personal Preferences` so these rules apply to every session automatically in Claude Chat (or to Claude Code or Claude Design, adapt it to other Harness and AI Model interfaces as required).
 
@@ -198,7 +198,7 @@ Governs agent handling of cross-session memories injected by Claude.ai system. E
 
     **Short-Term Memory** — platform auto-extracted between sessions. Volatile, lossy, model-authored. Context hints only; never authoritative. Examples: inferred prefs, session summaries, observed behaviors.
     
-    **Long-Term Memory** — human-authored files loaded explicitly: skills, configs, checkpoints, project docs, anything in the session file registry (§1). Versioned, checksummed, integrity-validated. Authority grows with temporal stability + human review. The most stable form of long-term memory can be derived from git version cotrolled commits of files. 
+    **Long-Term Memory** — human-authored files loaded explicitly: skills, configs, checkpoints, project docs, anything in the session file registry (§1). Versioned, checksummed, integrity-validated. Authority grows with temporal stability + human review. The most stable form of long-term memory can be derived from git version controlled commits of files. 
 
    **Selective Memory** — on-demand retreival of data from chat history (if enabled). This form of memory could be used for establishing better context in a user-driven manner for establishing autoritative facts in a conversation.
 
