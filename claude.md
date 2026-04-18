@@ -202,7 +202,7 @@ Governs agent handling of cross-session memories injected by Claude.ai system. E
 
    **Selective Memory** — on-demand retreival of data from chat history (if enabled). This form of memory could be used for establishing better context in a user-driven manner for establishing autoritative facts in a conversation.
 
-   **Latent Memory** — facts available in the training data embedded within th small or large language model being used by the agent. The authoritative nature of this type of memory can be evaluated at runtime if and when required. 
+   **Latent Memory** — facts available in the training data embedded within the small or large language model being used by the agent. The authoritative nature of this type of memory can be evaluated at runtime if and when required. 
 
 ---
 
