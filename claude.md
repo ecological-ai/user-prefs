@@ -11,7 +11,7 @@
 | Field        | Value |
 |--------------|-------|
 | `file_id`    | `claude.md` |
-| `version`    | `1.5.1` |
+| `version`    | `1.5.2` |
 | `scope`      | System-wide — applies to all sessions where this file is loaded |
 | `applies_to` | Claude (self-instruction) |
 | `parent`     | `prompteng-SKILL.md` — Section 2.4 (Resilience & Session Continuity) |
@@ -373,4 +373,4 @@ Cognitive guidelines for task execution. Trigger after §1–§7 operational ini
 
 ---
 
-*End of claude.md v1.5.1 — Human Approved*
+*End of claude.md v1.5.2 — Human Approved*
