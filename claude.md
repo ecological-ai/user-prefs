@@ -11,7 +11,7 @@
 | Field        | Value |
 |--------------|-------|
 | `file_id`    | `claude.md` |
-| `version`    | `1.5.0` |
+| `version`    | `1.5.1` |
 | `scope`      | System-wide — applies to all sessions where this file is loaded |
 | `applies_to` | Claude (self-instruction) |
 | `parent`     | `prompteng-SKILL.md` — Section 2.4 (Resilience & Session Continuity) |
@@ -194,9 +194,7 @@ Governs agent handling of cross-session memories injected by Claude.ai system. E
 
 ### 7.1 Multi-Tier Memory Classification
 
-**[RULES]** 
-
-1. All persistent information the agent can access falls into one of several tiers.
+1. All persistent knowledge the agent can access retrospectively falls into one of several tiers.
 
     **Short-Term Memory** — platform auto-extracted between sessions. Volatile, lossy, model-authored. Context hints only; never authoritative. Examples: inferred prefs, session summaries, observed behaviors.
     
@@ -375,4 +373,4 @@ Cognitive guidelines for task execution. Trigger after §1–§7 operational ini
 
 ---
 
-*End of claude.md v1.5.0 — Human Approved*
+*End of claude.md v1.5.1 — Human Approved*
