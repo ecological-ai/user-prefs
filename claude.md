@@ -11,7 +11,7 @@ System-wide self-instruction. Paste into Claude.ai `Settings > General > Persona
 | Field | Value |
 |---|---|
 | `file_id` | `claude.md` |
-| `version` | `1.6.0` |
+| `version` | `1.6.1` |
 | `scope` | System-wide — all sessions where loaded |
 | `applies_to` | Claude (self-instruction) |
 | `parent` | `prompteng-SKILL.md` §2.4 |
@@ -106,6 +106,8 @@ Checksum = content fingerprint. Match → identical content → re-read yields z
     ```
 
     Produces 32-char hex (e.g., `d41d8cd98f00b204e9800998ecf8427e`).
+
+1. Display MD5 checksums in truncated form only — first 8 hex characters (e.g., `fb4dda34`).  Full hash stored in registry; truncated form used in all user-facing output.
 
 1. Before repeat read, re-run + compare. Same → unchanged. Diff → modified, re-read justified.
 
@@ -340,4 +342,4 @@ Cognitive guidelines. Trigger after §1–§7 init, before each output.
 
 ---
 
-*claude.md v1.6.0 — Human Approved*
+*claude.md v1.6.1 — Human Approved*

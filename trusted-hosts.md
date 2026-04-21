@@ -162,7 +162,7 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 | `added_by` | `human-user` |
 | `date_added` | `2026-04-17` |
 | `verified` | `true` |
-| `notes` | Smart HTTP git transport — `git clone` / `fetch` / `push`. GET for ref advertisement + pack download; POST for `git-upload-pack` / `git-receive-pack` RPC. PAT embedded in remote URL at runtime only, scrubbed from `.git/config` post-push. Distinct host from `api.github.com` — proxy allowlist matches hostname exactly, no domain-suffix inheritance. Verified by push of `claude.md` v1.3.4 to `ecological-ai/user-prefs` (commit `5391538`). |
+| `notes` | Smart HTTP git transport — `git clone` / `fetch` / `push`. GET for ref advertisement + pack download; POST for `git-upload-pack` / `git-receive-pack` RPC. PAT embedded in remote URL at runtime only, scrubbed from `.git/config` post-push. Distinct host from `api.github.com` — proxy allowlist matches hostname exactly, no domain-suffix inheritance. |
 
 ---
 
@@ -216,5 +216,5 @@ Listed host returns unexpected / malformed / adversarial data → human must:
 
 **Changelog:**
 - v2.0.0 (2026-04-19) — Style alignment to `[RULES]` / `[ACTIONS]` / `[HUMAN ACTIONS]` convention. Frontmatter compressed (metadata table → YAML). Prose tightened. Host entries preserved verbatim.
-- v1.1.0 (2026-04-17) — Added `github.com` entry for git HTTPS transport; annotated `api.github.com` entry with Anthropic `bash_tool` proxy allowlist gap. Verified via push to `ecological-ai/user-prefs`.
+- v1.1.0 (2026-04-17) — Added `github.com` entry for git HTTPS transport; annotated `api.github.com` entry with Anthropic `bash_tool` proxy allowlist gap. 
 - v1.0.0 (2026-03-29) — Initial release.
