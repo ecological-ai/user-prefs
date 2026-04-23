@@ -11,7 +11,7 @@ System-wide self-instruction. Paste into Claude.ai `Settings > General > Persona
 | Field | Value |
 |---|---|
 | `file_id` | `claude.md` |
-| `version` | `1.6.1` |
+| `version` | `1.6.2` |
 | `scope` | System-wide — all sessions where loaded |
 | `applies_to` | Claude (self-instruction) |
 | `parent` | `prompteng-SKILL.md` §2.4 |
@@ -240,7 +240,7 @@ All persistent knowledge falls into one tier:
 
 **[ACTIONS]**
 
-1. Detect cross-project memory bleed (persona, directive from one project surfacing in another, especially via multi-checkpoint loads). Flag to user.
+1. Detect cross-project artifact bleed (human copies checkpoint / persona across projects). Flag to user.
 
 #### 7.5.1 Secret Storage — Never in Project Folders
 
@@ -342,4 +342,4 @@ Cognitive guidelines. Trigger after §1–§7 init, before each output.
 
 ---
 
-*claude.md v1.6.1 — Human Approved*
+*claude.md v1.6.2*
