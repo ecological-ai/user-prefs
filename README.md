@@ -54,14 +54,14 @@ Install into your Skill Directory, and load on demand when task requires:
 
 ## Reference 
 
-- Analysis of Ecological Codes and Designs: ***[https://ecological.codes](https://ecological.codes)*** Consider Sponsoring this project if you like it.
-- SP Deficiencies in:
-  - *[Sonnet 4.6 - Paraphrased and Compacted SP](https://github.com/klaucious/rnd/blob/trunk/src/claude-sonnet_4_6-paraphrased_system_prompt-compact.md)* 
-  - *[Opus 4.7 - Paraphrased and Compacted SP](https://github.com/klaucious/rnd/blob/trunk/doc/claude-opus_4_7-system_analysis.md)*
+- Consider ***[Sponsoring this project](https://github.com/sponsors/ecological-codes)*** if you like it or find it useful: Analysis of Ecological Codes and Designs — ***[https://ecological.codes](https://ecological.codes)*** 
+- Deficiencies found in SP of:
+  - *[Sonnet 4.6](https://github.com/klaucious/rnd/blob/trunk/src/claude-sonnet_4_6-paraphrased_system_prompt-compact.md)* 
+  - *[Opus 4.7](https://github.com/klaucious/rnd/blob/trunk/doc/claude-opus_4_7-system_analysis.md)*
 
 ## License
 
 See [LICENSE](./LICENSE). (C) Copyright 2026 - Sameer Khan - Various and Several Rights Reserved.
 
 ---
-README.md v1.6.0 - Human Approved
+README.md v1.6.1 - Human Approved
