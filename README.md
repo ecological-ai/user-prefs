@@ -2,21 +2,21 @@
 
 Platform-wide preferences and companion files for `harness+model` in agentic workflows.
 
-> Companion repository to **[ecological-codes/prompteng](https://github.com/ecological-codes/prompteng)**. Files here load via Personal Preferences or project knowledge; peer skills load on demand.
+> Companion repository to **[ecological-codes/prompteng](https://github.com/ecological-codes/prompteng)**. `agent.md`, `claude-sp-guards.md`, and `agent-prompt-discipline.md` load every session. `opus-thinking-mode.md` loads on demand.
 
 ## Introduction
 
-System-wide self-instructions, SP compensation guards, behavioral discipline rules, and session tooling for Claude.ai and Claude Code. Designed to compensate for known deficiencies in Anthropic's Sonnet 4.6 and Opus 4.7 system prompts — see `sp-compensations-map.md` for the full mapping.
+Platform-wide self-instructions, SP compensation guards, behavioral discipline rules, and session tooling for Claude.ai and Claude Code. Designed to compensate for known deficiencies in Anthropic's Sonnet 4.6 and Opus 4.7 system prompts — see `sp-compensations-map.md` for the full mapping.
 
-Core mechanism: `agent.md` (Personal Preferences) + `claude-sp-guards.md` (project knowledge) + on-demand companions.
+Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. `claude-sp-guards.md` and `agent-prompt-discipline.md` must also load every session — without them agents exhibit maladaptive behaviours and SP deficiencies go uncompensated.
 
 ## Set of Files
 
 | File | Purpose |
 |---|---|
-| `agent.md` | System-wide self-instruction — file registry, integrity checks, memory precedence. Paste into `Settings > General > Personal Preferences`. Supersedes `archived/claude.md`. |
-| `claude-sp-guards.md` | SP compensation companion — memory conflict surfacing, canonization, hygiene, credential protocol. Load as project knowledge in every project session. |
-| `agent-prompt-discipline.md` | Behavioral discipline rules for agents and subagents — assumption-surfacing, surgical edits, minimum viable output. Inspired by [Karpathy Style Skills](https://github.com/forrestchang/andrej-karpathy-skills/blob/main/CLAUDE.md). Load on demand. |
+| `agent.md` | Platform-wide self-instruction — file registry, integrity checks, memory precedence. Loads `prompteng-SKILL.md` every session. Paste into `Settings > General > Personal Preferences`. Supersedes `archived/claude.md`. |
+| `claude-sp-guards.md` | SP compensation companion — memory conflict surfacing, canonization, hygiene, credential protocol. Load every session as project knowledge. Required as long as Sonnet and Opus SP deficiencies persist. |
+| `agent-prompt-discipline.md` | Behavioral discipline rules for agents and subagents — assumption-surfacing, surgical edits, minimum viable output. Load every session — without it agents may exhibit maladaptive behaviours. Inspired by [Karpathy Style Skills](https://github.com/forrestchang/andrej-karpathy-skills/blob/main/CLAUDE.md). |
 | `opus-thinking-mode.md` | Opus adaptive thinking configuration. Perishable — model-version-specific. Load for Opus sessions only. |
 | `sp-compensations-map.md` | Analysis — maps `agent.md` §1–§3 to specific Sonnet 4.6 / Opus 4.7 SP deficiencies they compensate for. |
 | `git-init-session.sh` | Session credential management script. Exports PAT to env var via file-upload + bash-pipe pattern; never writes to disk. |
@@ -26,16 +26,20 @@ Core mechanism: `agent.md` (Personal Preferences) + `claude-sp-guards.md` (proje
 
 ## Install
 
+**Every session (mandatory):**
 - **agent.md:** paste contents into `Settings > General > Personal Preferences` in Claude.ai.
-- **claude-sp-guards.md:** add to Project Knowledge in every project that uses prompteng.
-- **agent-prompt-discipline.md / opus-thinking-mode.md:** upload to Project Knowledge or paste into session when needed.
+- **claude-sp-guards.md:** add to Project Knowledge in every project. Required until Anthropic resolves Sonnet / Opus SP deficiencies.
+- **agent-prompt-discipline.md:** add to Project Knowledge in every project. Required to prevent maladaptive agent behaviour.
+
+**On demand:**
+- **opus-thinking-mode.md:** upload to Project Knowledge or paste into session for Opus sessions only.
 - **git-init-session.sh:** upload as a file at session start; run via `source git-init-session.sh <PAT>`.
 
 ## Quickstart
 
 **Step 1 — Install `agent.md`.** Paste into `Settings > General > Personal Preferences`.
 
-**Step 2 — Add project companions.** In each project: upload `claude-sp-guards.md` to Project Knowledge.
+**Step 2 — Add mandatory project companions.** In each project: upload `claude-sp-guards.md` and `agent-prompt-discipline.md` to Project Knowledge.
 
 **Step 3 — Init session.** First message:
 ```
@@ -62,4 +66,4 @@ See ***[https://ecological.codes](https://ecological.codes)***
 See [LICENSE](./LICENSE). (C) Copyright 2026 - Sameer Khan - Various and Several Rights Reserved.
 
 ---
-README.md v1.4.0 - Human Approved
+README.md v1.5.0 - Human Approved
