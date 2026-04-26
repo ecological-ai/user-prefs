@@ -1,17 +1,54 @@
 # user-prefs
-Examples of "platform-wide" preferences for `harness+model` in agentic workflows.
 
-## Claude AI 
+Platform-wide preferences and companion files for `harness+model` in agentic workflows.
 
-- The ecological `claude.md` user-pref incorporates learnings from [Karpathy Style skills](https://github.com/forrestchang/andrej-karpathy-skills/blob/main/CLAUDE.md) for Claude models.
-- The `memory-enablement-checklist.html` is a way to ensure "memory hygiene" across projects when dealing with parallel agentic workflows. Doing technology development with natural language based programming requires such abstractions for economic "memory management".
-- The `trusted-hosts.md` is an allow-list for egress control, as agents can attempt to eagerly download data from URLs other than those in package managers, especially if they have been given wider and unchecked permissions for orchestrating agentic workflows. Try to mitigate maximum range of cyber attacks, that tend to permiate through compromised supply chains, to the best extent possible. 
+> Companion repository to **[ecological-codes/prompteng](https://github.com/ecological-codes/prompteng)**. Files here load via Personal Preferences or project knowledge; peer skills load on demand.
+
+## Introduction
+
+System-wide self-instructions, SP compensation guards, behavioral discipline rules, and session tooling for Claude.ai and Claude Code. Designed to compensate for known deficiencies in Anthropic's Sonnet 4.6 and Opus 4.7 system prompts — see `sp-compensations-map.md` for the full mapping.
+
+Core mechanism: `agent.md` (Personal Preferences) + `claude-sp-guards.md` (project knowledge) + on-demand companions.
+
+## Set of Files
+
+| File | Purpose |
+|---|---|
+| `agent.md` | System-wide self-instruction — file registry, integrity checks, memory precedence. Paste into `Settings > General > Personal Preferences`. Supersedes `archived/claude.md`. |
+| `claude-sp-guards.md` | SP compensation companion — memory conflict surfacing, canonization, hygiene, credential protocol. Load as project knowledge in every project session. |
+| `agent-prompt-discipline.md` | Behavioral discipline rules for agents and subagents — assumption-surfacing, surgical edits, minimum viable output. Inspired by [Karpathy Style Skills](https://github.com/forrestchang/andrej-karpathy-skills/blob/main/CLAUDE.md). Load on demand. |
+| `opus-thinking-mode.md` | Opus adaptive thinking configuration. Perishable — model-version-specific. Load for Opus sessions only. |
+| `sp-compensations-map.md` | Analysis — maps `agent.md` §1–§3 to specific Sonnet 4.6 / Opus 4.7 SP deficiencies they compensate for. |
+| `git-init-session.sh` | Session credential management script. Exports PAT to env var via file-upload + bash-pipe pattern; never writes to disk. |
+| `memory-enablement-checklist.md` | Memory hygiene checklist across the four-tier model (Short-Term, Long-Term, Selective, Latent). For parallel agentic workflows. |
+| `trusted-hosts.md` | Project-wide egress allow-list for `bash_tool` and outbound URL calls. Mitigates supply-chain injection via compromised URLs. |
+| `archived/claude.md` | `claude.md` v1.6.4 — superseded by `agent.md` v2.0.0. Retained for reference. |
+
+## Install
+
+- **agent.md:** paste contents into `Settings > General > Personal Preferences` in Claude.ai.
+- **claude-sp-guards.md:** add to Project Knowledge in every project that uses prompteng.
+- **agent-prompt-discipline.md / opus-thinking-mode.md:** upload to Project Knowledge or paste into session when needed.
+- **git-init-session.sh:** upload as a file at session start; run via `source git-init-session.sh <PAT>`.
+
+## Quickstart
+
+**Step 1 — Install `agent.md`.** Paste into `Settings > General > Personal Preferences`.
+
+**Step 2 — Add project companions.** In each project: upload `claude-sp-guards.md` to Project Knowledge.
+
+**Step 3 — Init session.** First message:
+```
+Initialize session as per agent.md
+```
+
+**Step 4 — Verify.** Registry table appears with BLAKE3 + token cost for loaded files. If missing → re-upload + retry.
 
 ## Peer Skills
 
 Load on demand when task requires:
 
-- **[prompteng](https://github.com/ecological-codes/prompteng)** — main set of rules + framework for doing better prompt engineering
+- **[prompteng](https://github.com/ecological-codes/prompteng)** — session init, security rules, 7-part prompt framework, persistence
 - **[captureng](https://github.com/ecological-codes/captureng)** — session-knowledge capture, CHECKPOINT mode
 - **[packageng](https://github.com/ecological-codes/packageng)** — `.skill` file validation + packaging
 - **[safe-skill-creator](https://github.com/ecological-codes/safe-skill-creator)** — skill design + iteration
@@ -20,5 +57,9 @@ Load on demand when task requires:
 
 See ***[https://ecological.codes](https://ecological.codes)***
 
+## License
+
+See [LICENSE](./LICENSE). (C) Copyright 2026 - Sameer Khan - Various and Several Rights Reserved.
+
 ---
-README v1.3.1 - Human Approved
+README.md v1.4.0 - Human Approved
