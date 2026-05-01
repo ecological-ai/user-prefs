@@ -47,12 +47,12 @@ Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude 
 
 ## Peer Skills
 
-Install into your Skill Directory, and load on demand when task requires:
+Install into Skill Directory. Load on demand when task requires:
 
-- **[prompteng](https://github.com/ecological-codes/prompteng)** — session init, security rules, 7-part prompt framework, persistence
-- **[captureng](https://github.com/ecological-codes/captureng)** — session-knowledge capture, CHECKPOINT mode
-- **[packageng](https://github.com/ecological-codes/packageng)** — `.skill` file validation + packaging
-- **[safe-skill-creator](https://github.com/ecological-codes/safe-skill-creator)** — skill design + iteration
+- **[prompteng](https://github.com/ecological-codes/prompteng)** — session init, security rules, 7-part prompt framework, persistence formats
+- **[captureng](https://github.com/ecological-codes/captureng)** — session-knowledge capture, CHECKPOINT mode, three-mode write (CREATE / APPEND / CHECKPOINT)
+- **[packageng](https://github.com/ecological-codes/packageng)** — `.skill` archive creation, frontmatter validation, kit bundling
+- **[safe-skill-creator](https://github.com/ecological-codes/safe-skill-creator)** — skill design + iteration via four strategies: Processing, Mediation, Forgetting, Integrity
 
 ## Reference 
 
@@ -66,4 +66,4 @@ Install into your Skill Directory, and load on demand when task requires:
 See [LICENSE](./LICENSE). (C) Copyright 2026 - Sameer Khan - Various and Several Rights Reserved.
 
 ---
-README.md v1.7.0 - Human Approved
+README.md v1.7.1 - Human Approved
