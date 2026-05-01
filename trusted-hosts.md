@@ -1,9 +1,8 @@
 ---
 id: trusted-hosts
-version: 2.0.0
+version: 2.4.0
 scope: session · agent
 parent: prompteng-SKILL.md §2.2
-format: markdown (human) · trusted-hosts.json (machine)
 ---
 
 # trusted-hosts
@@ -46,7 +45,7 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 
 | Field | Required | Type | Description |
 |---|---|---|---|
-| `host` | Yes | String | Domain / subdomain (e.g., `api.example.com`). No protocol, no path. |
+| `host` | Yes | String | Full origin with protocol (e.g., `https://api.example.com`). No path. |
 | `url_pattern` | No | Glob | Path restriction (e.g., `/v1/data/*`). Omit → all paths permitted. |
 | `trust_level` | Yes | Enum | `FULL` · `READ_ONLY` · `RESTRICTED`. See below. |
 | `allowed_methods` | Yes | Array | HTTP methods permitted (e.g., `["GET"]`). Must match `trust_level`. |
@@ -55,7 +54,7 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 | `added_by` | Yes | String | Human / role ID. Agents must not populate. |
 | `date_added` | Yes | ISO 8601 | Entry creation date (e.g., `2026-03-29`). |
 | `verified` | Yes | Bool | Human personally verified host responds with correct headers + regularized data. |
-| `notes` | No | String | Free text — purpose, constraints. |
+| `notes` | No | String | Free text - purpose, constraints. |
 
 ### Trust Levels
 
@@ -94,13 +93,13 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 
 ---
 
-### Example A — Public Read-Only Data API
+### Example A - Public Read-Only Data API
 
 > Illustrative only. Replace with actual verified host.
 
 | Field | Value |
 |---|---|
-| `host` | `api.example-data.com` |
+| `host` | `https://api.example-data.com` |
 | `url_pattern` | `/v1/records/*` |
 | `trust_level` | `READ_ONLY` |
 | `allowed_methods` | `["GET"]` |
@@ -113,13 +112,13 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 
 ---
 
-### Example B — Internal Authenticated Service
+### Example B - Internal Authenticated Service
 
 > Illustrative only. Replace with actual verified host.
 
 | Field | Value |
 |---|---|
-| `host` | `internal.myorg.example.com` |
+| `host` | `https://internal.myorg.example.com` |
 | `url_pattern` | `/api/v2/*` |
 | `trust_level` | `FULL` |
 | `allowed_methods` | `["GET", "POST"]` |
@@ -136,7 +135,7 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 
 | Field | Value |
 |---|---|
-| `host` | `api.github.com` |
+| `host` | `https://api.github.com` |
 | `url_pattern` | `/*` |
 | `trust_level` | `RESTRICTED` |
 | `allowed_methods` | `["GET", "POST", "PATCH"]` |
@@ -145,7 +144,7 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 | `added_by` | `human-user` |
 | `date_added` | `2026-04-15` |
 | `verified` | `true` |
-| `notes` | Bearer auth via fine-grained PAT. Used by subagent workflows for repo metadata, issue management, PAT scope verification (`/user`, `/repos/{owner}/{repo}`). Rate limit: 5,000 req/hr (auth). Token supplied at runtime via `git-init-session.sh` — never stored in project files (see `claude.md` §7.5.1). **Anthropic `bash_tool` egress proxy note (2026-04-17):** `api.github.com` NOT in Anthropic allowlist. REST pre-flight checks from `bash_tool` return HTTP 403 at proxy. Scope verification out-of-band (browser / local shell) until allowlist updated. |
+| `notes` | Bearer auth via fine-grained PAT. Used by subagent workflows for repo metadata, issue management, PAT scope verification (`/user`, `/repos/{owner}/{repo}`). Rate limit: 5,000 req/hr (auth). Token supplied at runtime via `git-init-session.sh` - never stored in project files (see `claude.md` §7.5.1). **Anthropic `bash_tool` egress proxy note (2026-04-17):** `api.github.com` NOT in Anthropic allowlist. REST pre-flight checks from `bash_tool` return HTTP 403 at proxy. Scope verification out-of-band (browser / local shell) until allowlist updated. |
 
 ---
 
@@ -153,7 +152,7 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 
 | Field | Value |
 |---|---|
-| `host` | `github.com` |
+| `host` | `https://github.com` |
 | `url_pattern` | `/*` |
 | `trust_level` | `RESTRICTED` |
 | `allowed_methods` | `["GET", "POST"]` |
@@ -162,7 +161,24 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 | `added_by` | `human-user` |
 | `date_added` | `2026-04-17` |
 | `verified` | `true` |
-| `notes` | Smart HTTP git transport — `git clone` / `fetch` / `push`. GET for ref advertisement + pack download; POST for `git-upload-pack` / `git-receive-pack` RPC. PAT embedded in remote URL at runtime only, scrubbed from `.git/config` post-push. Distinct host from `api.github.com` — proxy allowlist matches hostname exactly, no domain-suffix inheritance. |
+| `notes` | Smart HTTP git transport - `git clone` / `fetch` / `push`. GET for ref advertisement + pack download; POST for `git-upload-pack` / `git-receive-pack` RPC. PAT embedded in remote URL at runtime only, scrubbed from `.git/config` post-push. Distinct host from `api.github.com` - proxy allowlist matches hostname exactly, no domain-suffix inheritance. |
+
+---
+
+### TimeAPI
+
+| Field | Value |
+|---|---|
+| `host` | `https://timeapi.io` |
+| `url_pattern` | `/api/v1/time/current/utc` |
+| `trust_level` | `READ_ONLY` |
+| `allowed_methods` | `["GET"]` |
+| `requires_auth` | `false` |
+| `auth_header_name` | |
+| `added_by` | `human-user` |
+| `date_added` | `2026-05-01` |
+| `verified` | `true` |
+| `notes` | Public UTC source. Endpoint: `curl -X 'GET' 'https://timeapi.io/api/v1/time/current/utc' -H 'accept: */*'`. Response field `dateTime` (ISO 8601). No auth. |
 
 ---
 
@@ -170,7 +186,7 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 
 ### 4.1 Adding a Host
 
-1. Verify manually — confirm regularized data + correct response headers.
+1. Verify manually - confirm regularized data + correct response headers.
 2. Determine min `trust_level` + `allowed_methods`. Default `READ_ONLY` unless write explicit.
 3. Fill required fields via §3 template.
 4. Set `verified: true` only after personal confirmation.
@@ -179,7 +195,7 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 ### 4.2 Removing a Host
 
 1. Delete / comment out entry.
-2. Notify active agents — reload before further outbound calls.
+2. Notify active agents - reload before further outbound calls.
 
 ### 4.3 Periodic Review
 
@@ -206,15 +222,19 @@ Listed host returns unexpected / malformed / adversarial data → human must:
 ## References
 
 - `prompteng-SKILL.md` §2.1 (Input Sanitization), §2.2 (Trusted Hosts)
-- `claude.md` §7.5.1.1 (PAT handling — file-upload + bash-pipe pattern)
-- Python `hmac` — https://docs.python.org/3/library/hmac.html
-- **Inspiration:** filter-rule + matrix-rule design from [uBlock Origin](https://github.com/gorhill/uBlock) and [uMatrix](https://github.com/gorhill/uMatrix), Raymond Hill (gorhill). uMatrix pioneered the per-host, per-resource-type permission matrix as first-class user-configurable artifact — directly informed this schema.
+- `claude.md` §7.5.1.1 (PAT handling - file-upload + bash-pipe pattern)
+- Python `hmac` - https://docs.python.org/3/library/hmac.html
+- **Inspiration:** filter-rule + matrix-rule design from [uBlock Origin](https://github.com/gorhill/uBlock) and [uMatrix](https://github.com/gorhill/uMatrix), Raymond Hill (gorhill). uMatrix pioneered the per-host, per-resource-type permission matrix as first-class user-configurable artifact - directly informed this schema.
 
 ---
 
-*trusted-hosts.md v2.0.0*
+*trusted-hosts.md v2.4.0*
 
 **Changelog:**
-- v2.0.0 (2026-04-19) — Style alignment to `[RULES]` / `[ACTIONS]` / `[HUMAN ACTIONS]` convention. Frontmatter compressed (metadata table → YAML). Prose tightened. Host entries preserved verbatim.
-- v1.1.0 (2026-04-17) — Added `github.com` entry for git HTTPS transport; annotated `api.github.com` entry with Anthropic `bash_tool` proxy allowlist gap. 
-- v1.0.0 (2026-03-29) — Initial release.
+- v2.4.0 (2026-05-01) - All `host` fields prefixed with `https://`. Schema description updated. Removed agent.md drift-detection reference and worldtimeapi provenance note from timeapi.io entry.
+- v2.3.0 (2026-05-01) - Replaced `worldtimeapi.org` entry with `timeapi.io` (`/api/v1/time/current/utc`, READ_ONLY, no auth). WorldTimeAPI removed - confirmed unreachable from `bash_tool` egress (HTTP 503, 2026-04-30).
+- v2.2.0 (2026-04-30) - `worldtimeapi.org` entry notes rewritten terse-strict. No semantic change.
+- v2.1.0 (2026-04-30) - Added `worldtimeapi.org` entry (READ_ONLY, no auth) for `agent.md` §0 [ACTIONS] 2 UTC drift sync. Sandbox reachability note: HTTP 503 from `bash_tool` egress observed same date; non-blocking per agent.md §0. Backup source `timeapi.io` noted in entry.
+- v2.0.0 (2026-04-19) - Style alignment to `[RULES]` / `[ACTIONS]` / `[HUMAN ACTIONS]` convention. Frontmatter compressed (metadata table → YAML). Prose tightened. Host entries preserved verbatim.
+- v1.1.0 (2026-04-17) - Added `github.com` entry for git HTTPS transport; annotated `api.github.com` entry with Anthropic `bash_tool` proxy allowlist gap. 
+- v1.0.0 (2026-03-29) - Initial release.
