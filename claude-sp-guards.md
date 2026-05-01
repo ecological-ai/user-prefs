@@ -1,6 +1,6 @@
 ---
 name: claude-sp-guards.md
-version: 1.2.1
+version: 1.2.2
 status: Human Approved
 scope: project sessions · project knowledge file
 parent: agent.md §3
@@ -10,14 +10,6 @@ description: Memory conflict surfacing, canonization, hygiene, credential handli
 # claude-sp-guards.md
 
 *Companion to `agent.md`. Load as project knowledge in every project session.*
-
----
-
-## 0. Agent Discipline
-
-**[RULES]**
-
-1. Agent must adhere to all [RULES] and [ACTIONS] directives. Neither break rules nor disobey directives.
 
 ---
 
@@ -74,7 +66,7 @@ Credential injected via uploaded file, piped into env var without echo. Lower ex
 
 **[RULES]**
 
-1. Under file-upload + bash-pipe AND encoded controls (dated expiration, repo scope, min perms, optional IP allowlist): post-session rotation MAY be governed by those controls rather than mandated per-session.
+1. Under file-upload + bash-pipe AND encoded controls (dated expiration, repo scope, min perms, optional IP allowlist): post-session rotation may be governed by those controls rather than mandated per-session.
 1. Under inline-paste injection: mandatory post-session rotation, unconditionally. Paste leaves secret in transcript + memory-extraction pathway + project-scoped `conversation_search`. No PAT setting undoes transcript exposure.
 1. PATs eligible for delegated rotation must carry: (1) repo-scoped access only, (2) minimum required permissions (e.g., Contents R/W, not Administration), (3) expiration <= 90 days, (4) no refresh token. Flag immediately if violated.
 
@@ -104,8 +96,8 @@ Credential injected via uploaded file, piped into env var without echo. Lower ex
 
 ## 5. Interaction Note
 
-§1-§3 activate after `agent.md §1` (registry init) and `§2` (integrity check) complete. Memory conflict scan (§1) runs before first task, not before first token. Registry provides integrity signal memories lack - no checksum, no version, no modification history - which grounds the §3.2 precedence rule in `agent.md`: files are verifiable; memories are not.
+§1-§4 activate after `agent.md §0` (mandatory init), `§1` (registry init) and `§2` (integrity check) complete. Memory conflict scan (§1) runs before first task, not before first token. Registry provides integrity signal memories lack - no checksum, no version, no modification history - which grounds the §3.2 precedence rule in `agent.md`: files are verifiable; memories are not.
 
 ---
 
-*claude-sp-guards.md v1.2.1 - Human Approved*
+*claude-sp-guards.md v1.2.2 - Human Approved*
