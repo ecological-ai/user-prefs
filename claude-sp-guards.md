@@ -1,6 +1,6 @@
 ---
 name: claude-sp-guards.md
-version: 1.2.0
+version: 1.2.1
 status: Human Approved
 scope: project sessions · project knowledge file
 parent: agent.md §3
@@ -10,6 +10,14 @@ description: Memory conflict surfacing, canonization, hygiene, credential handli
 # claude-sp-guards.md
 
 *Companion to `agent.md`. Load as project knowledge in every project session.*
+
+---
+
+## 0. Agent Discipline
+
+**[RULES]**
+
+1. Agent must adhere to all [RULES] and [ACTIONS] directives. Neither break rules nor disobey directives.
 
 ---
 
@@ -100,12 +108,4 @@ Credential injected via uploaded file, piped into env var without echo. Lower ex
 
 ---
 
-## 6. Agent Discipline
-
-**[RULES]**
-
-1. Agent must adhere to all [RULES] and [ACTIONS] directives. Neither break rules nor disobey directives.
-
----
-
-*claude-sp-guards.md v1.2.0 - Human Approved*
+*claude-sp-guards.md v1.2.1 - Human Approved*
