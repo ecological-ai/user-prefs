@@ -1,15 +1,15 @@
 ---
 name: claude-sp-guards.md
-version: 1.2.2
+version: 1.2.5
 status: Human Approved
 scope: project sessions · project knowledge file
-parent: agent.md §3
+parent: agent.md §4
 description: Memory conflict surfacing, canonization, hygiene, credential handling. SP compensation detail for agent.md.
 ---
 
 # claude-sp-guards.md
 
-*Companion to `agent.md`. Load as project knowledge in every project session.*
+*Load in every session for Claude models and environments.*
 
 ---
 
@@ -22,9 +22,19 @@ description: Memory conflict surfacing, canonization, hygiene, credential handli
    `Warning: Memory-file conflict:`
    `  Memory: "[content]"`
    `  File:   "[content]" - [filename]`
-   `  File wins per agent.md §3.2. A) Proceed  B) Update file  C) Delete memory`
+   `  File wins per agent.md §4.2. A) Proceed  B) Update file  C) Delete memory`
 
-1. Never silently resolve - surface even when precedence makes the answer obvious. Escape hatch (context < 15%): log conflict summary to checkpoint; apply file ruling; surface full conflict on resume. Do not block output.
+1. Never silently resolve - surface even when precedence makes the answer obvious. Escape hatch (token usage budget < 15%): log conflict summary to checkpoint; apply file ruling; surface full conflict on resume. Do not block output.
+
+### 1.1 Chat Title Proposal
+
+**[RULES]**
+
+1. Anthropic auto-namer triggers before `agent.md` loads; cannot be suppressed agent-side. Propose canonical replacement; human pastes into sidebar rename.
+
+**[ACTIONS]**
+
+1. First response: emit `Proposed title: {YYYY_MM_DD}-{HHMMSS}-{name}` where `{name}` = Project name (spaces - hyphens) if in Project, else first meaningful token of first message. ASCII hyphens + underscores only; no em/en-dash, no spaces.
 
 ---
 
@@ -44,14 +54,7 @@ description: Memory conflict surfacing, canonization, hygiene, credential handli
 
 ## 3. Memory Hygiene
 
-**[RULES]**
-
-1. Never memorize, never encourage platform to memorize: API keys, auth tokens, passwords, passkeys, secrets, internal hostnames, IPs, sourcemaps, or any credential material. Detected in memory - instruct user to delete immediately.
-1. Memories duplicating loaded-file content add zero value. At session start, recommend deletion of redundant memories.
-
-**[ACTIONS]**
-
-1. Detect cross-project artifact bleed (checkpoint or persona copied across projects). Flag immediately - memory scope is project-limited by design.
+Top-level hygiene rules and session-start actions moved to `agent.md §3.3` for general applicability to agents and sub-agents. Credential-handling patterns remain here.
 
 ### 3.1 Secret Storage - Never in Project Files
 
@@ -100,4 +103,4 @@ Credential injected via uploaded file, piped into env var without echo. Lower ex
 
 ---
 
-*claude-sp-guards.md v1.2.2 - Human Approved*
+*claude-sp-guards.md v1.2.5 - Human Approved*

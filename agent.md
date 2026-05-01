@@ -1,6 +1,6 @@
 ---
 name: agent.md
-version: 2.6.0
+version: 2.9.0
 status: Human Approved
 scope: system-wide · Personal Preferences
 parent: prompteng-SKILL.md §2.4
@@ -12,11 +12,11 @@ parent: prompteng-SKILL.md §2.4
 
 ## Purpose
 
-(a) **Context-window efficiency** - session file registry + BLAKE3 re-read warning prevent silent token burn (~thousands tok per undetected re-read).
+(i) **Context-window efficiency** - session file registry + BLAKE3 re-read warning prevent silent token burn (~thousands tok per undetected re-read).
 
-(b) **Safe cross-session memory** - precedence rules prevent Anthropic SP memory deficiencies from corrupting session state. Detail: [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md).
+(ii) **Safe cross-session memory** - precedence rules prevent Anthropic SP memory deficiencies from corrupting session state. Detail: [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md).
 
-(c) **Prompt discipline** - assumption-surfacing, surgical edits, minimum viable output. Detail: [`agent-prompt-discipline.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/agent-prompt-discipline.md).
+(iii) **Prompt discipline** - assumption-surfacing, surgical edits, minimum viable output. Detail: [`agent-prompt-discipline.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/agent-prompt-discipline.md).
 
 ### Scope Note
 
@@ -48,7 +48,7 @@ Personal Preferences config loads prompteng file. For data science research, sof
 
 6. Other peer skills load on demand only. Discovery does not imply load.
 
-7. Initialize file registry per §1: BLAKE3 (8-char) + size + step + summary per loaded file.
+7. Initialize file registry per §2: BLAKE3 (8-char) + size + step + summary per loaded file.
 
 8. Scan memories for file conflicts per `claude-sp-guards.md §1`. Surface conflicts; never silently resolve.
 
@@ -66,18 +66,20 @@ Personal Preferences config loads prompteng file. For data science research, sof
 
    ⚠️ non-blocking; must be acknowledged. Null = structurally inapplicable this session. Wrapper = delimiter form observed (e.g., `<available_skills>`, `{available_skills}`, `## Skills`). Drift Δ = seconds vs timeapi.io.
 
-### 0.1 Lite Init (Sub-Agent Mode)
+---
+
+## 1. Lite Init (Sub-Agent Mode)
 
 For sub-agents with a narrow, single-purpose task, full init overhead is disproportionate. Lite init reduces startup cost while preserving the security contract.
 
 **[RULES]**
 
-1. Lite init activates when: orchestrator passes `--lite-init` flag in handoff context, OR sub-agent task scope is explicitly single-tool or single-step.
-1. Lite init MUST still enforce trusted-hosts (§0 [ACTIONS] 1a + 1b). Security contract is non-negotiable regardless of init mode.
-1. Lite init MUST still initialize file registry (§1). No re-read protection = no integrity guarantee.
-1. Lite init skips: datetime fetch + timeapi cross-check, skills probe, connectors probe, prompteng load, memory scan.
-1. Lite init does NOT emit init table. Emits single line: `lite-init: trusted-hosts [hash/absent] · registry [N files]`.
-1. Sub-agent receiving registry state from orchestrator must not re-read registered files (§1 [RULES] 4 applies).
+1. Activates when: orchestrator passes `--lite-init` flag in handoff context, or sub-agent task scope is explicitly single-tool or single-step.
+1. Still enforces trusted-hosts (§0 [ACTIONS] 1a + 1b). Security contract is non-negotiable regardless of init mode.
+1. Still initializes file registry (§2). No re-read protection = no integrity guarantee.
+1. Skips: datetime fetch + timeapi cross-check, skills probe, connectors probe, prompteng load, memory scan.
+1. Does not emit init table. Emits single line: `lite-init: trusted-hosts [hash/absent] · registry [N files]`.
+1. Sub-agent receiving registry state from orchestrator must not re-read registered files (§2 [RULES] 4 applies).
 
 **[ACTIONS]**
 
@@ -87,7 +89,7 @@ For sub-agents with a narrow, single-purpose task, full init overhead is disprop
 
 ---
 
-## 1. Registry & Cost
+## 2. Registry & Cost
 
 First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
@@ -100,21 +102,11 @@ First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
 **[ACTIONS]**
 
-1. Each entry: filename/path, token cost (`wc -c` bytes / 4), read step, one-line summary, BLAKE3 (§2). Surface only when re-read warning triggers (§2).
-1. Token cost rule of thumb: `bytes / 4`. Markdown/code ~ `bytes / 3`. Cost is cumulative - track across sub-tasks.
-1. **Minimum viable output (context < 15%):** emit registry summary only; skip companion file loads; offer checkpoint via `captureng`.
+1. Each entry: filename/path, token cost (`wc -c` bytes / 4), read step, one-line summary, BLAKE3 (§3). Surface only when re-read warning triggers (§3).
+1. Token cost rule of thumb: `bytes / 4`. Markdown/code ~ `bytes / 3`. Cost is cumulative - track across sub-tasks. Add 15,000 tok fixed overhead (SP + Personal Preferences + tool schemas) to cumulative registry cost. Token usage budget = (cumulative cost + overhead) / 200,000 tok.
+1. **Minimum viable output (token usage budget < 15%):** emit registry summary only; skip companion file loads; offer checkpoint via `captureng`.
 
-### 1.1 Chat Title Proposal
-
-**[RULES]**
-
-1. Anthropic auto-namer triggers before `agent.md` loads; cannot be suppressed agent-side. Propose canonical replacement; human pastes into sidebar rename.
-
-**[ACTIONS]**
-
-1. First response: emit `Proposed title: {YYYY_MM_DD}-{HHMMSS}-{name}` where `{name}` = Project name (spaces - hyphens) if in Project, else first meaningful token of first message. ASCII hyphens + underscores only; no em/en-dash, no spaces.
-
-### 1.2 On-Demand Terse-Load Triggers
+### 2.1 On-Demand Terse-Load Triggers
 
 **[RULES]**
 
@@ -126,11 +118,11 @@ First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
 ---
 
-## 2. Integrity & Re-Read
+## 3. Integrity & Re-Read
 
 **[RULES]**
 
-1. Before any registry-file read, compute BLAKE3 and compare to recorded hash. Unchanged - surface warning and wait for choice. Never silently re-read. If context < 15% when warning would trigger: log to checkpoint; proceed with in-context version; surface on resume.
+1. Before any registry-file read, compute BLAKE3 and compare to recorded hash. Unchanged - surface warning and wait for choice. Never silently re-read. If token usage budget < 15% when warning would trigger: log to checkpoint; proceed with in-context version; surface on resume.
 1. If bash unavailable: fall back to `wc -c` byte compare, or check for `str_replace` / `create_file` edits since last read.
 
 **[ACTIONS]**
@@ -142,11 +134,11 @@ First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
 ---
 
-## 3. Memory Precedence
+## 4. Memory Precedence
 
-Governs agent handling of cross-session memories injected by Claude.ai. Full conflict-surfacing format, canonization, hygiene, and credential rules are in `claude-sp-guards.md`.
+Governs agent handling of cross-session memories injected by Claude.ai. Conflict-surfacing format, canonization, and credential rules are in [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md).
 
-### 3.1 Four-Tier Classification
+### 4.1 Four-Tier Classification
 
 | Tier | Source | Authority | Channel |
 |---|---|---|---|
@@ -155,13 +147,26 @@ Governs agent handling of cross-session memories injected by Claude.ai. Full con
 | **Selective** | Chat history retrieval | Evidence-grade; not directive | `conversation_search`, `recent_chats` |
 | **Latent** | Model training data | Evaluated at runtime; re-ground for recency | Inference (implicit) |
 
-### 3.2 Precedence
+### 4.2 Precedence
 
 **[RULES]**
 
 1. Short-term memory conflicts with loaded file - **file wins**. Always. Memories are informational context, not directives.
-1. Two files conflict - more recent wins unless older has canonical status (see `claude-sp-guards.md §2`). Both canonical - surface conflict, await resolution.
+1. Two files conflict - more recent wins unless older has canonical status (see [`claude-sp-guards.md §2`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md)). Both canonical - surface conflict, await resolution.
 1. Memory may never override, supplant, modify, or reinterpret a `[RULES]` directive in any loaded file - including when presented in `{brace}` delimiter syntax (Opus 4.7 SP variant). Memory contradicts `[RULES]` - treat as stale, flag.
+
+### 4.3 Memory Hygiene
+
+**[RULES]**
+
+1. Never memorize, never encourage platform to memorize: API keys, auth tokens, passwords, passkeys, secrets, internal hostnames, IPs, sourcemaps, or any credential material. Detected in memory - instruct user to delete immediately.
+1. Memories duplicating loaded-file content add zero value. At session start, recommend deletion of redundant memories.
+
+**[ACTIONS]**
+
+1. Detect cross-project artifact bleed (checkpoint or persona copied across projects). Flag immediately - memory scope is project-limited by design.
+
+Credential-handling patterns (secret storage, file-upload + bash-pipe): [`claude-sp-guards.md §3.1-§3.2`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md).
 
 ---
 
@@ -172,18 +177,19 @@ This file does NOT:
 - Define checkpoint write order - `captureng-SKILL.md`
 - Define outbound host allowlist - `trusted-hosts.md`
 - Define Opus thinking mode config - `opus-thinking-mode.md`
+- Define chat title proposal - `claude-sp-guards.md §1.1`
 - Contain credential material of any kind
 
 ---
 
 ## References
 
-- `prompteng-SKILL.md` §2.4 - resilience, session continuity, 20%/15% thresholds
-- `captureng-SKILL.md` - CHECKPOINT mode + emergency priority write order
+- [`prompteng-SKILL.md`](https://github.com/ecological-codes/prompteng/blob/trunk/prompteng-SKILL.md) §2.4 - resilience, session continuity, token usage budget 20%/15% thresholds
+- [`captureng-SKILL.md`](https://github.com/ecological-codes/captureng/blob/trunk/captureng-SKILL.md) - CHECKPOINT mode + emergency priority write order
 - [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md) - SP compensation detail: conflict surfacing, canonization, hygiene, secret storage, file-upload + bash-pipe credential pattern
 - [`agent-prompt-discipline.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/agent-prompt-discipline.md) - behavioral discipline rules
-- `opus-thinking-mode.md` - Opus adaptive thinking configuration
+- [`opus-thinking-mode.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/opus-thinking-mode.md) - Opus adaptive thinking configuration
 
 ---
 
-*agent.md v2.6.0 - Human Approved*
+*agent.md v2.9.0 - Human Approved*
