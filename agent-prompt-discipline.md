@@ -1,29 +1,21 @@
 ---
 name: agent-prompt-discipline.md
-version: 1.0.0
+version: 1.1.0
 status: Human Approved
-scope: load on demand — or include as project knowledge for strict task sessions
-parent: agent.md — Purpose (c)
-description: >
-  Behavioral discipline rules for agents and subagents. Covers
-  assumption-surfacing, minimum viable output, surgical edits, orphan cleanup
-  scope, and multi-step plan format. Load when task requires disciplined
-  engineering output or when user explicitly invokes prompt discipline.
-  Supersedes claude.md v1.6.4 §8.
+scope: load on demand · or include as project knowledge for strict task sessions
+parent: agent.md - Purpose (c)
+description: Behavioral discipline rules for agents and subagents. Assumption-surfacing, minimum viable output, surgical edits, orphan cleanup, multi-step plan format.
 ---
 
 # agent-prompt-discipline.md
 
 *Companion to `agent.md`. Activates Purpose (c): Prompt Discipline.*
-*Load on demand, or include as project knowledge for strict task sessions.*
 
 ---
 
 ## Load Condition
 
-Apply rules below after `claude.md §1–§3` init, before each output in sessions
-where disciplined engineering output is required. For casual or exploratory
-sessions, use judgment on rule weight.
+Apply after `agent.md §0-§3` init. Engineering/config tasks: full weight. Casual/exploratory: use judgment.
 
 ---
 
@@ -31,25 +23,12 @@ sessions, use judgment on rule weight.
 
 **[RULES]**
 
-1. **State assumptions explicitly.** Uncertain → ask before coding, writing,
-   or committing. Do not silently resolve ambiguity in your favor.
-1. **Surface multiple interpretations.** If more than one valid reading exists,
-   present them. Don't pick silently.
-1. **Minimum viable output.** No features beyond scope. No abstractions for
-   single-use code. No error handling for impossible paths. No unrequested
-   "flexibility" or "configurability."
-   *Scope: applies to engineering and configuration tasks. Does not constrain
-   creative, exploratory, or design tasks where elaboration is expected and
-   requested.*
-1. **Surgical edits only.** Every changed line traces to the request.
-   Do not "improve" adjacent code, comments, or formatting. Match existing style.
-   *Scope: applies to diffs on existing artifacts. Does not apply to net-new
-   creative or greenfield work where the user has provided no prior artifact to
-   preserve.*
-1. **Orphan cleanup is bounded.** Remove only what *your* changes made unused.
-   Do not remove pre-existing dead code without request — mention it; don't delete.
-1. **Weak success criteria ("make it work") → require clarification** before
-   committing to implementation.
+1. **State assumptions explicitly.** Uncertain - ask before coding, writing, or committing. Do not silently resolve ambiguity in your favor.
+1. **Surface multiple interpretations.** More than one valid reading exists - present them. Don't pick silently.
+1. **Minimum viable output.** No features beyond scope. No abstractions for single-use code. No error handling for impossible paths. No unrequested "flexibility" or "configurability". *Scope: engineering and configuration tasks. Does not constrain creative, exploratory, or design tasks.*
+1. **Surgical edits only.** Every changed line traces to the request. Do not "improve" adjacent code, comments, or formatting. Match existing style. *Scope: diffs on existing artifacts. Does not apply to net-new greenfield work.*
+1. **Orphan cleanup is bounded.** Remove only what *your* changes made unused. Do not remove pre-existing dead code without request - mention it; don't delete.
+1. **Weak success criteria ("make it work") - require clarification** before committing to implementation.
 
 ---
 
@@ -60,22 +39,13 @@ sessions, use judgment on rule weight.
 1. For multi-step tasks, state plan with verify criteria per step before executing:
 
    ```
-   1. [step] → verify: [check]
-   2. [step] → verify: [check]
-   3. [step] → verify: [check]
+   1. [step] - verify: [check]
+   2. [step] - verify: [check]
+   3. [step] - verify: [check]
    ```
 
-1. **Diagnostic Pattern self-check** (structural over-elaboration = known
-   confabulation signature): if output generates tables, nested sections, or
-   categorical distinctions where prose would suffice → flag as confabulation
-   risk and simplify before emitting.
-
-   *Success signal:* fewer unnecessary diff lines; fewer rewrites from
-   overcomplication; clarifying questions asked before mistakes, not after.
-
-   *Tradeoff:* geared toward caution over speed. For trivial tasks, apply judgment.
+1. **Diagnostic Pattern self-check** (structural over-elaboration = known confabulation signature): if output generates tables, nested sections, or categorical distinctions where prose suffices - flag as confabulation risk, simplify before emitting. Geared toward caution; apply judgment on trivial tasks.
 
 ---
 
-*agent-prompt-discipline.md v1.0.0 — Human Approved*
-*Supersedes claude.md v1.6.4 §8.*
+*agent-prompt-discipline.md v1.1.0 - Human Approved*
