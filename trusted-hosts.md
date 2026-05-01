@@ -1,6 +1,6 @@
 ---
 id: trusted-hosts
-version: 2.4.0
+version: 2.5.0
 scope: session · agent
 parent: prompteng-SKILL.md §2.2
 ---
@@ -182,6 +182,23 @@ Session-scoped allowlist of API gateways + data resource URLs permitted for agen
 
 ---
 
+### GitHub Raw Content
+
+| Field | Value |
+|---|---|
+| `host` | `https://raw.githubusercontent.com` |
+| `url_pattern` | `/*` |
+| `trust_level` | `READ_ONLY` |
+| `allowed_methods` | `["GET"]` |
+| `requires_auth` | `false` |
+| `auth_header_name` | |
+| `added_by` | `human-user` |
+| `date_added` | `2026-05-01` |
+| `verified` | `true` |
+| `notes` | Public raw file delivery for GitHub repos. Use via `bash_tool` + `curl` only - `web_fetch` blocked by Anthropic provenance check regardless of allowlist (HTTP PERMISSIONS_ERROR confirmed 2026-05-01). No auth for public repos. |
+
+---
+
 ## 4. Maintenance & Audit
 
 ### 4.1 Adding a Host
@@ -228,9 +245,10 @@ Listed host returns unexpected / malformed / adversarial data → human must:
 
 ---
 
-*trusted-hosts.md v2.4.0*
+*trusted-hosts.md v2.5.0*
 
 **Changelog:**
+- v2.5.0 (2026-05-01) - Added `raw.githubusercontent.com` entry (READ_ONLY, no auth). Note: reachable via `bash_tool` + curl (HTTP 200 confirmed); blocked by `web_fetch` Anthropic provenance check independently of allowlist.
 - v2.4.0 (2026-05-01) - All `host` fields prefixed with `https://`. Schema description updated. Removed agent.md drift-detection reference and worldtimeapi provenance note from timeapi.io entry.
 - v2.3.0 (2026-05-01) - Replaced `worldtimeapi.org` entry with `timeapi.io` (`/api/v1/time/current/utc`, READ_ONLY, no auth). WorldTimeAPI removed - confirmed unreachable from `bash_tool` egress (HTTP 503, 2026-04-30).
 - v2.2.0 (2026-04-30) - `worldtimeapi.org` entry notes rewritten terse-strict. No semantic change.
