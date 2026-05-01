@@ -1,6 +1,6 @@
 ---
 name: agent.md
-version: 2.4.1
+version: 2.6.0
 status: Human Approved
 scope: system-wide · Personal Preferences
 parent: prompteng-SKILL.md §2.4
@@ -14,19 +14,13 @@ parent: prompteng-SKILL.md §2.4
 
 (a) **Context-window efficiency** - session file registry + BLAKE3 re-read warning prevent silent token burn (~thousands tok per undetected re-read).
 
-(b) **Safe cross-session memory** - precedence rules prevent Anthropic SP memory deficiencies from corrupting session state. Detail: `claude-sp-guards.md`.
+(b) **Safe cross-session memory** - precedence rules prevent Anthropic SP memory deficiencies from corrupting session state. Detail: [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md).
 
-(c) **Prompt discipline** - assumption-surfacing, surgical edits, minimum viable output. Detail: `agent-prompt-discipline.md`.
+(c) **Prompt discipline** - assumption-surfacing, surgical edits, minimum viable output. Detail: [`agent-prompt-discipline.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/agent-prompt-discipline.md).
 
 ### Scope Note
 
 Personal Preferences config loads prompteng file. For data science research, software engineering, web-search-driven analysis, file-editing tasks. Not for trivial questions - init overhead pays back across multi-step technical work only. Casual chats: disable Personal Preferences or use separate profile.
-
-## Companion Files:
-- claude-sp-guards.md
-- agent-prompt-discipline.md
-- opus-thinking-mode.md (load for Claude Opus sessions only)
-- git-init-session.sh (session credential management, load when needed by user)
 
 ---
 
@@ -40,7 +34,9 @@ Personal Preferences config loads prompteng file. For data science research, sof
 
 **[ACTIONS]**
 
-1. Load `trusted-hosts.md` if present in project folder. Sets outbound-host allowlist before any web-fetch. Absent - skip; no allowlist this session.
+1a. Load `trusted-hosts.md` if present in project folder. Sets outbound-host allowlist before any web-fetch. Absent - skip; "no allowlist found for this session". 
+
+1b. Before any outbound URL call: check allowlist. No match → halt, report URL + task, await confirmation. Never attempt-then-report for URL calls. Allowlist absent → same behavior.
 
 2. Compute UTC datetime via system call. Cross-check `dateTime` field in `GET https://timeapi.io/api/v1/time/current/utc`. Surface discrepancy. Web fetch wins if drift > 5s. Emit `YYYY_MM_DD-HHMMSS`. Maintain second-level sync across turns. Recheck drift only on "checkpoint" / "current time" requests; surface findings.
 
@@ -69,6 +65,25 @@ Personal Preferences config loads prompteng file. For data science research, sof
    | Memory scan   | ✅        | N conflicts                         |
 
    ⚠️ non-blocking; must be acknowledged. Null = structurally inapplicable this session. Wrapper = delimiter form observed (e.g., `<available_skills>`, `{available_skills}`, `## Skills`). Drift Δ = seconds vs timeapi.io.
+
+### 0.1 Lite Init (Sub-Agent Mode)
+
+For sub-agents with a narrow, single-purpose task, full init overhead is disproportionate. Lite init reduces startup cost while preserving the security contract.
+
+**[RULES]**
+
+1. Lite init activates when: orchestrator passes `--lite-init` flag in handoff context, OR sub-agent task scope is explicitly single-tool or single-step.
+1. Lite init MUST still enforce trusted-hosts (§0 [ACTIONS] 1a + 1b). Security contract is non-negotiable regardless of init mode.
+1. Lite init MUST still initialize file registry (§1). No re-read protection = no integrity guarantee.
+1. Lite init skips: datetime fetch + timeapi cross-check, skills probe, connectors probe, prompteng load, memory scan.
+1. Lite init does NOT emit init table. Emits single line: `lite-init: trusted-hosts [hash/absent] · registry [N files]`.
+1. Sub-agent receiving registry state from orchestrator must not re-read registered files (§1 [RULES] 4 applies).
+
+**[ACTIONS]**
+
+1. On lite init, check for `trusted-hosts.md` only. Skip all other §0 [ACTIONS].
+2. Initialize registry with files passed in handoff context. Do not probe filesystem.
+3. Emit: `lite-init: trusted-hosts [8-char hash or "absent"] · registry [N files] · task: [task token]`.
 
 ---
 
@@ -99,7 +114,7 @@ First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
 1. First response: emit `Proposed title: {YYYY_MM_DD}-{HHMMSS}-{name}` where `{name}` = Project name (spaces - hyphens) if in Project, else first meaningful token of first message. ASCII hyphens + underscores only; no em/en-dash, no spaces.
 
-### 1.3 On-Demand Terse-Load Triggers
+### 1.2 On-Demand Terse-Load Triggers
 
 **[RULES]**
 
@@ -165,10 +180,10 @@ This file does NOT:
 
 - `prompteng-SKILL.md` §2.4 - resilience, session continuity, 20%/15% thresholds
 - `captureng-SKILL.md` - CHECKPOINT mode + emergency priority write order
-- `claude-sp-guards.md` - SP compensation detail: conflict surfacing, canonization, hygiene, secret storage, file-upload + bash-pipe credential pattern
-- `agent-prompt-discipline.md` - behavioral discipline rules
+- [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md) - SP compensation detail: conflict surfacing, canonization, hygiene, secret storage, file-upload + bash-pipe credential pattern
+- [`agent-prompt-discipline.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/agent-prompt-discipline.md) - behavioral discipline rules
 - `opus-thinking-mode.md` - Opus adaptive thinking configuration
 
 ---
 
-*agent.md v2.4.1 - Human Approved*
+*agent.md v2.6.0 - Human Approved*
