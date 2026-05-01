@@ -1,9 +1,9 @@
 ---
 name: agent-prompt-discipline.md
-version: 1.2.1
+version: 1.2.2
 status: Human Approved
 scope: load on demand · project knowledge
-parent: agent.md
+usewith: agent.md
 description: Prompt discipline: assumption-surfacing, surgical edits, min viable output.
 ---
 
@@ -54,4 +54,4 @@ Apply after `agent.md §0-§3` init. Engineering/config tasks: full weight. Casu
 
 ---
 
-*agent-prompt-discipline.md v1.2.1 - Human Approved*
+*agent-prompt-discipline.md v1.2.2 - Human Approved*
