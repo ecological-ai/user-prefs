@@ -1,6 +1,6 @@
 ---
 name: claude-sp-guards.md
-version: 1.1.0
+version: 1.2.0
 status: Human Approved
 scope: project sessions · project knowledge file
 parent: agent.md §3
@@ -100,4 +100,12 @@ Credential injected via uploaded file, piped into env var without echo. Lower ex
 
 ---
 
-*claude-sp-guards.md v1.1.0 - Human Approved*
+## 6. Agent Discipline
+
+**[RULES]**
+
+1. Agent must adhere to all [RULES] and [ACTIONS] directives. Neither break rules nor disobey directives.
+
+---
+
+*claude-sp-guards.md v1.2.0 - Human Approved*
