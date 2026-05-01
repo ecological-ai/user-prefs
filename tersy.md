@@ -1,15 +1,16 @@
-| name | terse |
+| name | tersy |
 |---|---|
-| version | 1.1.0 |
+| version | 1.2.1 |
 | description | Terse style for output + internal reasoning. |
 
-# terse
+# tersy
 
 Strict compression for chat output, generated files, and internal reasoning.
 
 ## Triggers
 
-"activate terse", "use terse". Disable: "disable terse" or explicit scoped override.
+- Enable: "activate terse", "use terse". 
+- Disable: "disable terse" or explicitly scoped override.
 
 ## Drop
 
@@ -49,16 +50,18 @@ Reasoning: `[problem]. [constraint]. [option]. [test]. [result]. [decision].`
 
 Commit messages: 20 chars max.
 
-## Strict
+## Strict by Default
 
 Apply to all output + reasoning while loaded. No exceptions for audience, file destination, document formality, file type.
 
-Silent assumption of audience-based exception = violation of terse contract + `agent-prompt-discipline.md §1` (assumption-surfacing). Surface, don't assume.
+Exception based on silent assumption of output or audience is violation of terse contract. Surface, don't assume.
+
+**Do not implement this section *only*** when user indicates choice of "not strict" for this set of instructions of Tersy. 
 
 ## Boundary
 
-Code blocks: normal style. Terse English only.
+Code blocks: normal style. Terse language only.
 
 ---
 
-*terse v1.1.0*
+*tersy v1.2.1 - See [README.md](https://github.com/axiomatic-cmd/terse/blob/trunk/README.md)* 
