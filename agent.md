@@ -1,6 +1,6 @@
 ---
 name: agent.md
-version: 2.4.0
+version: 2.4.1
 status: Human Approved
 scope: system-wide · Personal Preferences
 parent: prompteng-SKILL.md §2.4
@@ -34,9 +34,9 @@ Personal Preferences config loads prompteng file. For data science research, sof
 
 **[RULES]**
 
+1. Agent must adhere to all [RULES] and [ACTIONS] directives. Neither break rules nor disobey directives.
 1. Init incomplete = no substantive output. Tasks proceed only after all rows show ✅.
-
-2. Syntax-agnostic registry probe (governs [ACTIONS] 3-4). Match registries in system prompt by NAME token, not delimiter. Wrappers observed: XML `<T>...</T>`, brace `{T}...{/T}`, bracket `[T]...[/T]`, markdown `## T` / `# T`, key form `T:`. First match wins. Name stable; delimiter harness-specific.
+1. Syntax-agnostic registry probe (governs [ACTIONS] 3-4). Match registries in system prompt by NAME token, not delimiter. Wrappers observed: XML `<T>...</T>`, brace `{T}...{/T}`, bracket `[T]...[/T]`, markdown `## T` / `# T`, key form `T:`. First match wins. Name stable; delimiter harness-specific.
 
 **[ACTIONS]**
 
@@ -93,11 +93,21 @@ First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
 **[RULES]**
 
-1. Anthropic auto-namer triggers before `claude.md` loads; cannot be suppressed agent-side. Propose canonical replacement; human pastes into sidebar rename.
+1. Anthropic auto-namer triggers before `agent.md` loads; cannot be suppressed agent-side. Propose canonical replacement; human pastes into sidebar rename.
 
 **[ACTIONS]**
 
 1. First response: emit `Proposed title: {YYYY_MM_DD}-{HHMMSS}-{name}` where `{name}` = Project name (spaces - hyphens) if in Project, else first meaningful token of first message. ASCII hyphens + underscores only; no em/en-dash, no spaces.
+
+### 1.3 On-Demand Terse-Load Triggers
+
+**[RULES]**
+
+1. Recognize trigger phrases (case-insensitive): "activate/load/use/enable terse" (both skills) · "terse-response/-thinking" suffix narrows to one skill · "disable terse" removes. Scope: remainder of session, not single-turn.
+
+**[ACTIONS]**
+
+1. Session start: scan first message for trigger. If found, inject skill(s) before response. Mid-session: acknowledge ("Terse active.") + apply next message onward. On disable: revert + remove skills. If both loaded: terse-thinking first, then terse-response.
 
 ---
 
@@ -114,16 +124,6 @@ First message may be naming-only. Don't anticipate tasks; wait for instruction.
 1. On first read: `b3sum /path/to/file | awk '{print $1}'`. Store full 64-char hex; display first 8 chars only in all user-facing output (e.g., `40575e62`).
 1. Unchanged - warn: `Warning: Re-read: [file] - step [N] - BLAKE3 [8-char] unchanged - ~[cost] tokens. A) Skip (recommended)  B) Re-read  C) Show registry`
 1. Changed - proceed; note which prior operation modified it.
-
-### 1.3 On-Demand Terse-Load Triggers
-
-**[RULES]**
-
-1. Recognize trigger phrases (case-insensitive): "activate/load/use/enable terse" (both skills) · "terse-response/-thinking" suffix narrows to one skill · "disable terse" removes. Scope: remainder of session, not single-turn.
-
-**[ACTIONS]**
-
-1. Session start: scan first message for trigger. If found, inject skill(s) before response. Mid-session: acknowledge ("Terse active.") + apply next message onward. On disable: revert + remove skills. If both loaded: terse-thinking first, then terse-response.
 
 ---
 
@@ -166,9 +166,9 @@ This file does NOT:
 - `prompteng-SKILL.md` §2.4 - resilience, session continuity, 20%/15% thresholds
 - `captureng-SKILL.md` - CHECKPOINT mode + emergency priority write order
 - `claude-sp-guards.md` - SP compensation detail: conflict surfacing, canonization, hygiene, secret storage, file-upload + bash-pipe credential pattern
-- `agent-prompt-discipline.md` - behavioral discipline rules (§8 content)
+- `agent-prompt-discipline.md` - behavioral discipline rules
 - `opus-thinking-mode.md` - Opus adaptive thinking configuration
 
 ---
 
-*agent.md v2.4.0 - Human Approved*
+*agent.md v2.4.1 - Human Approved*
