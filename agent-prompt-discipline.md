@@ -1,15 +1,15 @@
 ---
 name: agent-prompt-discipline.md
-version: 1.1.0
+version: 1.2.0
 status: Human Approved
-scope: load on demand · or include as project knowledge for strict task sessions
+scope: load on demand · project knowledge
 parent: agent.md - Purpose (c)
-description: Behavioral discipline rules for agents and subagents. Assumption-surfacing, minimum viable output, surgical edits, orphan cleanup, multi-step plan format.
+description: Prompt discipline: assumption-surfacing, surgical edits, min viable output.
 ---
 
 # agent-prompt-discipline.md
 
-*Companion to `agent.md`. Activates Purpose (c): Prompt Discipline.*
+*Companion to `agent.md`.*
 
 ---
 
@@ -48,4 +48,10 @@ Apply after `agent.md §0-§3` init. Engineering/config tasks: full weight. Casu
 
 ---
 
-*agent-prompt-discipline.md v1.1.0 - Human Approved*
+## References
+
+- Karpathy style skills by Forrest Chang - https://github.com/forrestchang/andrej-karpathy-skills
+
+---
+
+*agent-prompt-discipline.md v1.2.0 - Human Approved*
