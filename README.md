@@ -19,6 +19,8 @@ Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude 
 | `agent.md` | Reduces token usage by 60% to 70% by introducing file registry, re-read warning, integrity checks, memory precedence. Loads `prompteng-SKILL.md` for sanetizing given prompts. Supersedes `archived/claude.md`. |
 | `claude-sp-guards.md` | System Prompt (SP) compensation companion for Claude environments, provides memory conflict surfacing, canonization, hygiene, credential protocol. Load every session, required as long as Sonnet and Opus SP deficiencies persist. Adapt to other models as required. |
 | `agent-prompt-discipline.md` | Behavioral discipline rules for agents and subagents — assumption-surfacing, surgical edits, minimum viable output. Load every session — without it agents may exhibit maladaptive behaviours. Inspired by [Karpathy Style Skills](https://github.com/forrestchang/andrej-karpathy-skills/blob/main/CLAUDE.md). |
+| `tersy.md` | Terse output and reasoning style for agents. Strict by default — compresses filler, hedging, intensifiers, and pleasantries. Activate via `activate tersy.` or `activate tersy, not strict.` for human-readable output. |
+| `.claude/claude.md` | Concatenated single-file version of `agent.md` + `claude-sp-guards.md` + `agent-prompt-discipline.md` for platforms or harnesses that load a single config file. |
 | `opus-thinking-mode.md` | Opus adaptive thinking configuration. Perishable — model-version-specific. Load for Opus sessions only. |
 | `sp-compensations-map.md` | Analysis — maps `agent.md` §1–§3 for compensating specific SP deficiencies in Sonnet 4.6 and Opus 4.7. |
 | `git-init-session.sh` | Session credential management script. Exports Personal Access Token (PAT) in `.pat` format to env `var` via file-upload + bash-pipe pattern; never writes to disk. Do not save PAT as `.md` or `.txt` file as they can get read directly into Context Window. This can be problematic and a security risk if "Session Memory" is enabled in the AI Platform.|
@@ -64,4 +66,4 @@ Install into your Skill Directory, and load on demand when task requires:
 See [LICENSE](./LICENSE). (C) Copyright 2026 - Sameer Khan - Various and Several Rights Reserved.
 
 ---
-README.md v1.6.1 - Human Approved
+README.md v1.7.0 - Human Approved
