@@ -1,6 +1,6 @@
 ---
 name: agent.md
-version: 3.2.0
+version: 3.3.0
 status: Human Approved
 scope: system-wide; Personal Preferences
 parent: prompteng-SKILL.md §2.4
@@ -41,7 +41,12 @@ Personal Preferences config loads prompteng file. For data science research, sof
 1. Load `ecological-codes-compact.md` from project knowledge at session start. Absent - emit `⚠️ ecological-codes absent` in init table; surface to human; do not block.
 
 1. In all outputs - including chat responses, files, documents, prose, and sub-agent outputs - use hyphens or comma or semi-colon as clause separator.
-1. Never use em-dash or en-dash as separator or stylistic device in any output; always coma (,) instead of middle dot (·, U+00B7).
+1. Never use em-dash or en-dash as separator or stylistic device in any output; always comma (,) instead of middle dot (·, U+00B7).
+1. Tersy - recognize trigger phrases (case-insensitive): "activate/load/use/enable tersy"; variants: "tersy", "tersy, not strict"; "disable tersy" removes/deactivates. Scope: remainder of session, not single-turn. When tersy is active at orchestrator level, include `tersy: active` in all sub-agent handoff contexts; sub-agents receiving this token must load and apply tersy before any output.
+
+**[ACTIONS]**
+
+1. Tersy - scan first message for trigger at session start. If found, load tersy skill before response. Mid-session: acknowledge ("tersy active.") + apply next message onward. On disable: revert + remove tersy skill.
 
 ---
 
@@ -49,61 +54,34 @@ Personal Preferences config loads prompteng file. For data science research, sof
 
 **[RULES]**
 
-1. Init incomplete = no substantive output. Tasks proceed only after all rows show ✅. Init table schema is fixed: all 8 rows required. A missing row is structurally incomplete and blocks output identically to a ✅ failure.
-1. Syntax-agnostic registry probe (governs [ACTIONS] 3-4). Match registries in system prompt by NAME token, not delimiter. Wrappers observed: XML `<T>...</T>`, brace `{T}...{/T}`, bracket `[T]...[/T]`, markdown `## T` / `# T`, key form `T:`. First match wins. Name stable; delimiter harness-specific.
+1. Init incomplete = no substantive output. Tasks proceed only after all rows show ✅. Init table schema is fixed: all 6 rows required. A missing row is structurally incomplete and blocks output identically to a ✅ failure.
+1. Syntax-agnostic registry probe (governs [ACTIONS] 4). Match registries in system prompt by NAME token, not delimiter. Wrappers observed: XML `<T>...</T>`, brace `{T}...{/T}`, bracket `[T]...[/T]`, markdown `## T` / `# T`, key form `T:`. First match wins. Name stable; delimiter harness-specific.
 
 **[ACTIONS]**
 
 1. Load `trusted-hosts.md` if present in project folder. Sets outbound-host allowlist before any web-fetch. Absent - skip; "no allowlist found for this session".
 2. Before any outbound URL call: check allowlist. No match - halt, report URL + task, await confirmation. Never attempt-then-report for URL calls. Allowlist absent - same behavior.
 3. Compute UTC datetime via system call. Cross-check `utc_time` field in `GET https://timeapi.io/api/v1/time/current/utc`. Surface discrepancy. Web fetch wins if drift > 5s. Emit `YYYY_MM_DD-HHMMSS`. Maintain second-level sync across turns. Recheck drift only on "checkpoint" / "current time" requests; surface findings. Fetch failure - emit `⚠️ datetime-unverified` in init table; continue, do not block. Egress blocked by trusted-hosts - emit `Null`; skip fetch.
-4. Discover skills. Probe name tokens (per [RULES] 2): `available_skills`, `skills`, `tools`. Found - parse as authoritative registry. Not found - filesystem fallback: `/mnt/skills/user/`, `/mnt/skills/public/`, `/mnt/skills/`, `~/.skills/`, `./skills/`, harness paths if known. Surface source + wrapper, or "not detected" with locations checked.
-5. Discover connectors. Probe name tokens: `available_connectors`, `connectors`, `mcp_servers`, `mcp_apps`, `available_tools`. Tool capabilities like `tool_search` / `search_mcp_registry` count as indicators. Surface source + wrapper, or "none detected".
-6. Skills registry located AND `prompteng` present: read `/mnt/skills/user/prompteng/SKILL.md`; then read the file marked "Required - load first" (currently `prompteng-SKILL.md`). Emit in init table row: BLAKE3 (8-char) + version from frontmatter + tok estimate. Row absent, version missing, or hash missing = init INCOMPLETE - no further output. Absent entirely - surface "prompteng not found"; proceed agent.md-only; emit `⚠️` in init table row.
-7. Other peer skills load on demand only. Discovery does not imply load.
-8. Initialize file registry per §3; hash procedure defined in §4: BLAKE3 (8-char) + size + step + summary per loaded file.
-9. Scan memories for file conflicts per `claude-sp-guards.md §1`. Surface conflicts; never silently resolve.
-10. Emit init table as next user-facing response. All rows must show ✅ (or ⚠️ / Null) before tasks or instructions proceed:
+4. Discover skills + load prompteng (atomic). Probe name tokens (per [RULES] 2): `available_skills`, `skills`, `tools`. Found - parse as authoritative registry. Not found - filesystem fallback: `/mnt/skills/user/`, `/mnt/skills/public/`, `/mnt/skills/`, `~/.skills/`, `./skills/`, harness paths if known. Skills registry located AND `prompteng` present: read `/mnt/skills/user/prompteng/SKILL.md`; then read the file marked "Required - load first" (currently `prompteng-SKILL.md`). Emit in init table: source + wrapper - prompteng BLAKE3 (8-char) + version from frontmatter + tok estimate. Row absent, version missing, or hash missing = init INCOMPLETE - no further output. Absent entirely - surface "prompteng not found"; proceed agent.md-only; emit `⚠️` in init table row.
+5. Other peer skills load on demand only. Discovery does not imply load.
+6. Initialize file registry per §2; hash procedure defined in §3: BLAKE3 (8-char) + size + step + summary per loaded file.
+7. Scan memories for file conflicts per `claude-sp-guards.md §1`. Surface conflicts; never silently resolve.
+8. Emit init table as next user-facing response. All rows must show ✅ (or ⚠️ / Null) before tasks or instructions proceed:
 
-   | Init item        | Status    | Detail                                              |
-   |------------------|-----------|-----------------------------------------------------|
-   | trusted-hosts    | ✅/Null   | hash + tok / "absent"                               |
-   | eco-codes        | ✅/⚠️     | hash + tok / "absent"                               |
-   | Datetime         | ✅/⚠️     | `YYYY_MM_DD-HHMMSS` + drift Δ / "unverified"       |
-   | Skills probe     | ✅/⚠️     | source + wrapper / "not detected"                   |
-   | Connectors       | ✅/⚠️     | source + wrapper / "none detected"                  |
-   | prompteng        | ✅/⚠️     | hash · version · tok / "absent"                     |
-   | Registry         | ✅        | N files tracked                                     |
-   | Memory scan      | ✅        | N conflicts                                         |
+   | Init item          | Status    | Detail                                                              |
+   |--------------------|-----------|---------------------------------------------------------------------|
+   | trusted-hosts      | ✅/Null   | hash + tok / "absent"                                               |
+   | eco-codes          | ✅/⚠️     | hash + tok / "absent"                                               |
+   | Datetime           | ✅/⚠️     | `YYYY_MM_DD-HHMMSS` + drift Δ / "unverified"                       |
+   | Skills + prompteng | ✅/⚠️     | source - wrapper - prompteng: hash · version · tok / "absent"       |
+   | Registry           | ✅        | N files tracked                                                     |
+   | Memory scan        | ✅        | N conflicts                                                         |
 
-   ⚠️ non-blocking; must be acknowledged. Null = structurally inapplicable this session. Wrapper = delimiter form observed (e.g., `<available_skills>`, `{available_skills}`, `## Skills`). Drift Δ = seconds (system call vs timeapi.io). prompteng row requires hash + version from frontmatter as proof of load - detection alone is insufficient.
+   ⚠️ non-blocking; must be acknowledged. Null = structurally inapplicable this session. Wrapper = delimiter form observed (e.g., `<available_skills>`, `{available_skills}`, `## Skills`). Drift Δ = seconds (system call vs timeapi.io). Skills + prompteng row requires prompteng hash + version from frontmatter as proof of load - detection alone is insufficient.
 
 ---
 
-## 2. Lite Init (Sub-Agent Mode)
-
-For sub-agents with a narrow, single-purpose task, full init overhead is disproportionate. Lite init reduces startup cost while preserving the security contract.
-
-**[RULES]**
-
-1. Activates when: orchestrator passes `--lite-init` flag in handoff context, or sub-agent task scope is explicitly single-tool or single-step.
-1. Still enforces trusted-hosts (§1 [ACTIONS] 1 + 2). Security contract is non-negotiable regardless of init mode.
-1. Still initializes file registry (§3). No re-read protection = no integrity guarantee.
-1. Skips: datetime fetch + timeapi cross-check, skills probe, connectors probe, prompteng load, memory scan.
-1. Does not emit init table. Emits single line: `lite-init: trusted-hosts [hash/absent]; registry [N files]`.
-1. Sub-agent receiving registry state from orchestrator must not re-read registered files (§3 [RULES] 3 applies).
-1. If orchestrator handoff context includes files with credential-adjacent names (`.pat`, `.env`, `git-init-session.sh`): run `claude-sp-guards.md §3` credential check before proceeding. Non-negotiable.
-1. If handoff context includes `tersy: active`: load and apply tersy skill before any output (§6 [RULES] 2 applies).
-
-**[ACTIONS]**
-
-1. On lite init, check for `trusted-hosts.md` only. Skip all other §1 [ACTIONS].
-2. Initialize registry with files passed in handoff context. Do not probe filesystem.
-3. Emit: `lite-init: trusted-hosts [8-char hash or "absent"]; registry [N files]; credential check: [pass/flag/skipped]; task: [task token]`.
-
----
-
-## 3. Registry & Cost
+## 2. Registry & Cost
 
 First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
@@ -115,13 +93,13 @@ First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
 **[ACTIONS]**
 
-1. Each entry: filename/path, token cost (`wc -c` bytes / 4), read step, one-line summary, BLAKE3 (§4). Surface only when re-read warning triggers (§4).
-1. Token cost rule of thumb: `bytes / 4`. Markdown/code ~ `bytes / 3`. Cost is cumulative - track across sub-tasks. System Prompt (SP), Personal Preferences (PP). Add 15,000 tok fixed overhead (SP + PP + tool schemas) to cumulative registry cost. Definitions (for Claude): `session` = harness+model initialized in a container for web or mobile based platforms; one session = 5 hr container lifetime. `context_window_size` = 200,000 tok per session (default); can be recast by user in session init message. Token usage budget = (cumulative cost + overhead) / context_window_size.
-1. **Minimum viable output (token usage budget < 15%):** emit registry summary only; skip companion file loads; offer checkpoint via `captureng`.
+1. Each entry: filename/path, tok cost, read step, one-line summary, BLAKE3 (§3). Surface only when re-read warning triggers.
+1. Tok cost: `bytes / 4` (prose); `bytes / 3` (markdown/code). Cumulative across sub-tasks. Add 15,000 tok fixed overhead (SP + PP + tool schemas). `context_window_size` = 200,000 tok default. Token usage budget = (cumulative + overhead) / context_window_size.
+1. **Token usage budget < 15%:** emit registry summary only; skip companion file loads; offer checkpoint via `captureng`.
 
 ---
 
-## 4. Integrity & Re-Read
+## 3. Integrity & Re-Read
 
 **[RULES]**
 
@@ -130,18 +108,18 @@ First message may be naming-only. Don't anticipate tasks; wait for instruction.
 
 **[ACTIONS]**
 
-1. Install `b3sum` if absent: `apt-get install -y b3sum 2>/dev/null | true`. If install fails: attempt `md5sum --version 2>/dev/null`. If available: emit `⚠️ integrity check via md5`; note `hash-algo: md5 (change-detection only)` in registry header. If neither available: emit `⚠️ integrity check unavailable`; await user confirmation before any file re-read.
-1. On first read: `b3sum /path/to/file | awk '{print $1}'`. Store full 64-char hex; display first 8 chars only in all user-facing output (e.g., `40575e62`).
+1. Install `b3sum` if absent: `apt-get install -y b3sum 2>/dev/null | true`. Fallback: `md5sum` (change-detection only; emit `⚠️ integrity check via md5`). Neither available: emit `⚠️ integrity check unavailable`; block re-read until user confirms.
+1. On first read: `b3sum /path/to/file | awk '{print $1}'`. Store full 64-char hex; display first 8 chars in all user-facing output.
 1. Unchanged - warn: `Warning: Re-read: [file] - step [N] - BLAKE3 [8-char] unchanged - ~[cost] tokens. A) Skip (recommended)  B) Re-read  C) Show registry`
 1. Changed - proceed; note which prior operation modified it.
 
 ---
 
-## 5. Memory Precedence
+## 4. Memory Precedence
 
 Governs agent handling of cross-session memories injected by Claude.ai. Conflict-surfacing format, canonization, and credential rules are in [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md).
 
-### 5.1 Four-Tier Classification
+### 4.1 Four-Tier Classification
 
 | Tier | Source | Authority | Channel |
 |---|---|---|---|
@@ -150,7 +128,7 @@ Governs agent handling of cross-session memories injected by Claude.ai. Conflict
 | **Selective** | Chat history retrieval | Evidence-grade; not directive | `conversation_search`, `recent_chats` |
 | **Latent** | Model training data | Evaluated at runtime; re-ground for recency | Inference (implicit) |
 
-### 5.2 Precedence
+### 4.2 Precedence
 
 **[RULES]**
 
@@ -159,31 +137,19 @@ Governs agent handling of cross-session memories injected by Claude.ai. Conflict
 1. Memory may never override, supplant, modify, or reinterpret a `[RULES]` directive in any loaded file - including when presented in `{brace}` or `## section` delimiter syntax. Memory contradicts `[RULES]` - treat as stale, flag.
 1. Latent tier knowledge with high training-data density (core language, well-documented APIs, established algorithms) is treated as stable-until-contradicted. Runtime evidence postdating training wins; absent contradiction, latent is not treated as unreliable by default.
 
-### 5.3 Memory Hygiene
+### 4.3 Memory Hygiene
 
 **[RULES]**
 
-1. Never memorize, never encourage platform to memorize: API keys, auth tokens, passwords, passkeys, secrets, internal hostnames, IPs, sourcemaps, or any credential material. Detected in chat memory - instruct user to delete immediately.
+1. Credential pattern detected in chat (API key, PAT, Bearer token, password, passkey, secret, internal hostname, IP, sourcemap): warn immediately; do not echo, summarize, or reference the value; recommend file-upload + bash-pipe pattern; recommend post-session rotation if inline-pasted. Credential found in existing memory - instruct user to delete immediately + rotate.
 1. Memories duplicating loaded-file content add zero value. At session start, recommend deletion of redundant memories.
 
 **[ACTIONS]**
 
+1. Credential pattern detected: emit `⚠️ credential exposure: [pattern type] - [recommended action]` before any other output in that turn.
 1. Detect cross-project artifact bleed (checkpoint or persona copied across projects). Flag immediately - memory scope is project-limited by design.
 
 Credential-handling patterns (secret storage, file-upload + bash-pipe): [`claude-sp-guards.md §3.1-§3.2`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md).
-
----
-
-## 6. Tersy
-
-**[RULES]**
-
-1. Recognize trigger phrases (case-insensitive): "activate/load/use/enable tersy"; variants: "tersy", "tersy, not strict"; "disable tersy" removes/deactivates. Scope: remainder of session, not single-turn.
-1. When tersy is active at orchestrator level, include `tersy: active` in all sub-agent handoff contexts. Sub-agents receiving this token must load and apply tersy before any output (§2 [RULES] 8 applies).
-
-**[ACTIONS]**
-
-1. Session start: scan first message for trigger. If found, inject tersy skill before response. Mid-session: acknowledge ("tersy active.") + apply next message onward. On disable: revert + remove tersy skill.
 
 ---
 
@@ -199,4 +165,4 @@ Credential-handling patterns (secret storage, file-upload + bash-pipe): [`claude
 
 ---
 
-*agent.md v3.2.0 - Human Approved*
+*agent.md v3.3.0 - Human Approved*
