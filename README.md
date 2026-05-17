@@ -23,7 +23,7 @@ Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude 
 | `.claude/claude.md` | Concatenated single-file version of `agent.md` + `claude-sp-guards.md` + `agent-prompt-discipline.md` for platforms or harnesses that load a single config file. |
 | `opus-thinking-mode.md` | Opus adaptive thinking configuration. Perishable -- model-version-specific. Load for Opus sessions only. |
 | `sp-compensations-map.md` | Analysis -- maps `agent.md` §1–§3 for compensating specific SP deficiencies in Sonnet 4.6 and Opus 4.7. |
-| `lite-init.md` | The compact version of agent.md used during handoff to subagents for tasks scoped by a proper orchestrator agent| 
+| `lite-init.md` | The compact version of `agent.md` used during handoff to subagents for tasks scoped by a proper orchestrator agent| 
 | `git-init-session.sh` | Session credential management script. Exports Personal Access Token (PAT) in `.pat` format to env `var` via file-upload + bash-pipe pattern; never writes to disk. Do not save PAT as `.md` or `.txt` file as they can get read directly into Context Window. This can be problematic and a security risk if "Session Memory" is enabled in the AI Platform.|
 | `memory-enablement-checklist.md` | Memory hygiene checklist across the four-tier model (Short-Term, Long-Term, Selective, Latent). For parallel agentic workflows. |
 | `trusted-hosts.md` | Project-wide fine-grained egress allow-list for `bash_tool` and outbound URL calls. Tries to mitigate supply-chain injection via compromised URLs. |
@@ -67,4 +67,4 @@ Install into Skill Directory. Load on demand when task requires:
 See [LICENSE](./LICENSE). (C) Copyright 2026 - Sameer Khan - Various and Several Rights Reserved.
 
 ---
-README.md v1.8.0 - Human Approved
+README.md v1.8.1 - Human Approved
