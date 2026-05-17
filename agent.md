@@ -1,6 +1,6 @@
 ---
 name: agent.md
-version: 3.3.0
+version: 3.3.1
 status: Human Approved
 scope: system-wide; Personal Preferences
 parent: prompteng-SKILL.md §2.4
