@@ -10,7 +10,7 @@ Platform-wide self-instructions, System Prompt (SP) compensation guards, behavio
 
 Designed to compensate for known deficiencies in Anthropic's SP for Sonnet 4.6 and Opus 4.7 -- see `sp-compensations-map.md` for the full mapping.
 
-Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude environments and models, `claude-sp-guards.md` and `agent-prompt-discipline.md` must also load every session because without them, agents tend to exhibit maladaptive behaviours and SP deficiencies go unchecked.
+Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude environments and models, `claude-sp-guards.md` and `agent-prompt-discipline.md` must also load every session because without them, agents tend to exhibit maladaptive behaviours and SP deficiencies go unchecked. Use [claude.md](https://github.com/ecological-codes/user-prefs/blob/trunk/.claude/claude.md) for in Anthropic's enviornments. 
 
 ## Set of Files
 
@@ -23,7 +23,7 @@ Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude 
 | `.claude/claude.md` | Concatenated single-file version of `agent.md` + `claude-sp-guards.md` + `agent-prompt-discipline.md` for platforms or harnesses that load a single config file. |
 | `opus-thinking-mode.md` | Opus adaptive thinking configuration. Perishable -- model-version-specific. Load for Opus sessions only. |
 | `sp-compensations-map.md` | Analysis -- maps `agent.md` §1–§3 for compensating specific SP deficiencies in Sonnet 4.6 and Opus 4.7. |
-| `lite-init.md` | The compact version of `agent.md` used during handoff to subagents for tasks scoped by a proper orchestrator agent| 
+| `lite-init.md` | The compact version of `agent.md` used during handoff to subagents for tasks scoped by a proper orchestrator agent. Use [lite init skill](https://github.com/ecological-codes/lite-init/tree/trunk) as needed. | 
 | `git-init-session.sh` | Session credential management script. Exports Personal Access Token (PAT) in `.pat` format to env `var` via file-upload + bash-pipe pattern; never writes to disk. Do not save PAT as `.md` or `.txt` file as they can get read directly into Context Window. This can be problematic and a security risk if "Session Memory" is enabled in the AI Platform.|
 | `memory-enablement-checklist.md` | Memory hygiene checklist across the four-tier model (Short-Term, Long-Term, Selective, Latent). For parallel agentic workflows. |
 | `trusted-hosts.md` | Project-wide fine-grained egress allow-list for `bash_tool` and outbound URL calls. Tries to mitigate supply-chain injection via compromised URLs. |
@@ -38,7 +38,8 @@ Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude 
 **As and When Needed:**
 - **claude-sp-guards.md:** Don't merely add it to Skill Directory, it will under-trigger. Instead, add to Project Knowledge in each project or paste into Personal Preferences, when using any Claude enviornment or models. Otherwise required until Anthropic resolves Sonnet / Opus SP deficiencies. 
 - **opus-thinking-mode.md:** upload to Project Knowledge or paste into session for Opus sessions only.
-- **trusted-hosts.md:** Add to Project Knowledge or upload into Context Window when needed. 
+- **trusted-hosts.md:** Add to Project Knowledge or upload into Context Window when needed.
+- **lite-init.md:** Add to Project Knowldge or as a skill. Also see [ecological-codes/lite-init](https://github.com/ecological-codes/lite-init/tree/trunk) for eval tests. 
 - **git-init-session.sh:** upload to Project Knowledge or upload into Context Window; run via `source git-init-session.sh <PAT>` for the PAT scoped git repo.
 
 ## Quickstart
@@ -67,4 +68,4 @@ Install into Skill Directory. Load on demand when task requires:
 See [LICENSE](./LICENSE). (C) Copyright 2026 - Sameer Khan - Various and Several Rights Reserved.
 
 ---
-README.md v1.8.1 - Human Approved
+README.md v1.8.2 - Human Approved
