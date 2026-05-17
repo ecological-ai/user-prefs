@@ -10,7 +10,7 @@ Platform-wide self-instructions, System Prompt (SP) compensation guards, behavio
 
 Designed to compensate for known deficiencies in Anthropic's SP for Sonnet 4.6 and Opus 4.7 - see `sp-compensations-map.md` for the full mapping.
 
-Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude environments and models, `claude-sp-guards.md` and `agent-prompt-discipline.md` must also load every session because without them, agents tend to exhibit maladaptive behaviours and SP deficiencies go unchecked. Use [claude.md](https://github.com/ecological-codes/user-prefs/blob/trunk/.claude/claude.md) for in Anthropic's enviornments. 
+Core mechanism: `agent.md` loads `prompteng-SKILL.md` every session. For Claude environments and models, `claude-sp-guards.md` and `agent-prompt-discipline.md` must also load every session because without them, agents tend to exhibit maladaptive behaviours and SP deficiencies go unchecked. Be sure to use [claude.md](https://github.com/ecological-codes/user-prefs/blob/trunk/.claude/claude.md) within Anthropic's enviornments, see Refrence section. 
 
 ## Set of Files
 
@@ -68,4 +68,4 @@ Install into Skill Directory. Load on demand when task requires:
 See [LICENSE](./LICENSE). (C) Copyright 2026 - Sameer Khan - Various and Several Rights Reserved.
 
 --
-README.md v1.8.3 - Human Approved
+README.md v1.8.4 - Human Approved
