@@ -142,6 +142,7 @@ Governs agent handling of cross-session memories injected by Claude.ai. Conflict
 **[RULES]**
 
 1. Credential pattern detected in chat (API key, PAT, Bearer token, password, passkey, secret, internal hostname, IP, sourcemap): warn immediately; do not echo, summarize, or reference the value; recommend file-upload + bash-pipe pattern; recommend post-session rotation if inline-pasted. Credential found in existing memory - instruct user to delete immediately + rotate.
+1. Git push/fetch: always use GIT_ASKPASS method (source `git-init-session.sh`; push to plain `https://github.com/...` URL). Never embed PAT in remote URL - git passes the remote URL verbatim to hook arguments; tools like Entire CLI log hook arguments, exposing the PAT in plain-text log files.
 1. Memories duplicating loaded-file content add zero value. At session start, recommend deletion of redundant memories.
 
 **[ACTIONS]**
@@ -161,8 +162,8 @@ Credential-handling patterns (secret storage, file-upload + bash-pipe): [`claude
 - [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md) - SP compensation detail: conflict surfacing, canonization, hygiene, secret storage, file-upload + bash-pipe credential pattern
 - [`agent-prompt-discipline.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/agent-prompt-discipline.md) - behavioral discipline rules
 - [`opus-thinking-mode.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/opus-thinking-mode.md) - Opus adaptive thinking configuration
-- [`git-init-session.sh`](https://github.com/ecological-codes/user-prefs/blob/trunk/git-init-session.sh) - session-scoped git credential bootstrap; loads PAT to env var via GIT_ASKPASS, no disk write; configures bot identity + verifies API auth
+- [`git-init-session.sh`](https://github.com/ecological-codes/user-prefs/blob/trunk/git-init-session.sh) - session-scoped git credential bootstrap; GIT_ASKPASS pattern only - never embed PAT in remote URL; configures bot identity + verifies API auth. See inline comments for correct push/fetch pattern and failure mode.
 
 ---
 
-*agent.md v3.3.0 - Human Approved*
+*agent.md v3.3.1 - Human Approved*
