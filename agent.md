@@ -1,6 +1,6 @@
 ---
 name: agent.md
-version: 3.3.0
+version: 3.4.0
 status: Human Approved
 scope: system-wide; Personal Preferences
 parent: prompteng-SKILL.md §2.4
@@ -43,10 +43,12 @@ Personal Preferences config loads prompteng file. For data science research, sof
 1. In all outputs - including chat responses, files, documents, prose, and sub-agent outputs - use hyphens or comma or semi-colon as clause separator.
 1. Never use em-dash or en-dash as separator or stylistic device in any output; always comma (,) instead of middle dot (·, U+00B7).
 1. Tersy - recognize trigger phrases (case-insensitive): "activate/load/use/enable tersy"; variants: "tersy", "tersy, not strict"; "disable tersy" removes/deactivates. Scope: remainder of session, not single-turn. When tersy is active at orchestrator level, include `tersy: active` in all sub-agent handoff contexts; sub-agents receiving this token must load and apply tersy before any output.
+1. Sessionlog - recognize trigger phrases (case-insensitive): "activate sessionlog", "--full-log", "enable full log". When active: load scribeng skill; create `/home/claude/session-log.jsonl`; write `session_start` event; append R history events incrementally per scribeng sessionlog spec. Scope: remainder of session. Include `sessionlog: active` in all sub-agent handoff contexts.
 
 **[ACTIONS]**
 
 1. Tersy - scan first message for trigger at session start. If found, load tersy skill before response. Mid-session: acknowledge ("tersy active.") + apply next message onward. On disable: revert + remove tersy skill.
+1. Sessionlog - scan first message for trigger at session start. If found, load scribeng skill; create log file; write session_start event before first response. Mid-session trigger: acknowledge ("sessionlog active.") + begin log immediately.
 
 ---
 
@@ -73,7 +75,7 @@ Personal Preferences config loads prompteng file. For data science research, sof
    | trusted-hosts      | ✅/Null   | hash + tok / "absent"                                               |
    | eco-codes          | ✅/⚠️     | hash + tok / "absent"                                               |
    | Datetime           | ✅/⚠️     | `YYYY_MM_DD-HHMMSS` + drift Δ / "unverified"                       |
-   | Skills + prompteng | ✅/⚠️     | source - wrapper - prompteng: hash · version · tok / "absent"       |
+   | Skills + prompteng | ✅/⚠️     | source - wrapper - prompteng: hash - version - tok / "absent"       |
    | Registry           | ✅        | N files tracked                                                     |
    | Memory scan        | ✅        | N conflicts                                                         |
 
@@ -162,8 +164,9 @@ Credential-handling patterns (secret storage, file-upload + bash-pipe): [`claude
 - [`claude-sp-guards.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/claude-sp-guards.md) - SP compensation detail: conflict surfacing, canonization, hygiene, secret storage, file-upload + bash-pipe credential pattern
 - [`agent-prompt-discipline.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/agent-prompt-discipline.md) - behavioral discipline rules
 - [`opus-thinking-mode.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/opus-thinking-mode.md) - Opus adaptive thinking configuration
+- [`scribeng-SKILL.md`](https://github.com/ecological-codes/user-prefs/blob/trunk/scribeng-SKILL.md) - session capture skill; checkpoint mode + full sessionlog mode (--full-log); agent as scribe of own R history
 - [`git-init-session.sh`](https://github.com/ecological-codes/user-prefs/blob/trunk/git-init-session.sh) - session-scoped git credential bootstrap; GIT_ASKPASS pattern only - never embed PAT in remote URL; configures bot identity + verifies API auth. See inline comments for correct push/fetch pattern and failure mode.
 
 ---
 
-*agent.md v3.3.1 - Human Approved*
+*agent.md v3.4.0 - Human Approved*
